@@ -2,10 +2,10 @@ import React from "react";
 
 const Logo = () => {
   return (
-    <div className="inline-flex items-center gap-3 select-none cursor-pointer me-4">
+    <div className="inline-flex items-center gap-2 select-none cursor-pointer me-4">
       {/* Icon */}
       <svg
-        className="w-14 h-14 text-white"
+        className="w-10 h-10 text-white"
         viewBox="0 0 64 64"
         xmlns="http://www.w3.org/2000/svg">
         {/* camera body */}
@@ -21,7 +21,7 @@ const Logo = () => {
       </svg>
 
       {/* Word‑mark */}
-      <span className="font-sans font-semibold text-4xl leading-none text-white">
+      <span className="font-sans font-semibold text-2xl leading-none text-white">
         FilmFindr
       </span>
     </div>

@@ -1,8 +1,11 @@
+import HeroSection from '@/components/hero-section'
 import React from 'react'
 
 const Page = () => {
   return (
-    <div>Page</div>
+    <div className='flex flex-col'>
+      <HeroSection />
+    </div>
   )
 }
 
