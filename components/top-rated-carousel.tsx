@@ -28,12 +28,12 @@ const TopRatedCarousel = ({ movies }: { movies: Movie[] }) => {
       <h2 className="text-2xl font-semibold text-white px-6">Top Rated</h2>
 
       {/* Carousel Container */}
-      <div className="group relative">
+      <div className="relative">
         {/* Left scroll button */}
         <button
           onClick={() => scroll("left")}
           className="absolute left-2 top-1/2 z-10 -translate-y-1/2 bg-black/50 p-2 rounded-full 
-                   opacity-0 group-hover:opacity-100 transition-opacity duration-300 
+                   opacity-0 hover:opacity-100 transition-opacity duration-300 
                    hover:bg-black/75 disabled:opacity-0"
           aria-label="Scroll left">
           <IoChevronBack className="h-6 w-6 text-white" />
@@ -42,7 +42,7 @@ const TopRatedCarousel = ({ movies }: { movies: Movie[] }) => {
         {/* Movies container */}
         <div
           ref={carouselRef}
-          className="flex gap-4 overflow-x-auto scrollbar-hide px-6 py-4"
+          className="flex gap-4 overflow-x-auto scrollbar-hide px-6 py-4 h-[300px]"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
           {movies?.map((movie: Movie) => (
             <MovieCard
@@ -59,7 +59,7 @@ const TopRatedCarousel = ({ movies }: { movies: Movie[] }) => {
         <button
           onClick={() => scroll("right")}
           className="absolute right-2 top-1/2 z-10 -translate-y-1/2 bg-black/50 p-2 rounded-full 
-                   opacity-0 group-hover:opacity-100 transition-opacity duration-300 
+                   opacity-0 hover:opacity-100 transition-opacity duration-300 
                    hover:bg-black/75 disabled:opacity-0"
           aria-label="Scroll right">
           <IoChevronForward className="h-6 w-6 text-white" />

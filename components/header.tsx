@@ -17,7 +17,7 @@ const iconSize = "h-6 w-6";
 export default function Header() {
   return (
     <>
-      <header className="absolute inset-x-0 top-0 z-50 hidden lg:flex items-center justify-between px-8 py-4 pointer-events-none">
+      <header className="hidden lg:flex items-center justify-between px-8 py-4 pointer-events-none">
         <div className="pointer-events-auto px-4 py-1">
           <Logo />
         </div>
