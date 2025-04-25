@@ -17,7 +17,7 @@ import {
   CollapsibleContent,
 } from "@/components/ui/collapsible";
 import { Slider } from "@/components/ui/slider";
-import { RotateCcw, ChevronDown, ChevronUp } from "lucide-react";
+import { RotateCcw, ChevronDown } from "lucide-react";
 
 type Genre =
   | "Action"
@@ -60,7 +60,7 @@ const allGenres: Genre[] = [
   "Western",
 ];
 
-export default function MoviesPageFilter({
+export default function PageFilter({
   onApply,
 }: {
   onApply: (filters: {
@@ -71,9 +71,6 @@ export default function MoviesPageFilter({
     language: string;
   }) => void;
 }) {
-  /* ------------------------------------------------------------------ */
-  /* local state                                                         */
-  /* ------------------------------------------------------------------ */
   const [sortBy, setSortBy] = useState("popularity.desc");
   const [genres, setGenres] = useState<Genre[]>([]);
   const [rating, setRating] = useState(0); // 0‒10

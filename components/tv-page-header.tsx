@@ -6,11 +6,11 @@ interface Props {
   total: number;
 }
 
-export default function MoviesPageHeader({ start, end, total }: Props) {
+export default function TvPageHeader({ start, end, total }: Props) {
   return (
     <PageHeader
-      title="Movies"
-      subtitle="Browse through our extensive collection of movies"
+      title="TV Shows"
+      subtitle="Browse through our extensive collection of TV shows"
       start={start}
       end={end}
       total={total}

@@ -2,11 +2,11 @@
 "use client";
 
 import { useState } from "react";
-import { movieData } from "@/utils/movie-data";
-import MoviesPageHeader from "@/components/movies-page-header";
+import { movieData as tvData } from "@/utils/movie-data";
 import PageFilter from "@/components/page-filter";
-import MoviesGrid from "@/components/movies-grid";
+import TVGrid from "@/components/tv-grid";
 import { Movie } from "@/utils/types";
+import TvPageHeader from "@/components/tv-page-header";
 
 type Genre =
   | "Action"
@@ -28,8 +28,8 @@ type Genre =
   | "War"
   | "Western";
 
-export default function MoviesPage() {
-  const [filteredMovies, setFilteredMovies] = useState<Movie[]>(movieData);
+export default function TVPage() {
+  const [filteredShows, setFilteredShows] = useState<Movie[]>(tvData);
 
   const applyFilters = ({
     sortBy,
@@ -44,8 +44,8 @@ export default function MoviesPage() {
     year: number;
     language: string;
   }) => {
-    const filtered = movieData.filter((movie) => movie.rating >= rating);
-    setFilteredMovies(filtered);
+    const filtered = tvData.filter((show) => show.rating >= rating);
+    setFilteredShows(filtered);
   };
 
   return (
@@ -55,13 +55,13 @@ export default function MoviesPage() {
 
       {/* right column */}
       <section className="flex-1">
-        <MoviesPageHeader
+        <TvPageHeader
           start={1}
-          end={filteredMovies.length}
-          total={movieData.length}
+          end={filteredShows.length}
+          total={tvData.length}
         />
         <div className="mt-6 px-4 md:px-12">
-          <MoviesGrid movies={filteredMovies} />
+          <TVGrid shows={filteredShows} />
         </div>
       </section>
     </main>

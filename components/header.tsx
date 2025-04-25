@@ -1,4 +1,3 @@
-// header.tsx
 import Link from "next/link";
 import Logo from "./logo";
 import {
@@ -9,7 +8,6 @@ import {
   UserCircleIcon,
 } from "@heroicons/react/24/outline";
 
-/* shared styles */
 const pill = "rounded-full backdrop-blur-md ring-1 ring-white/10";
 const navItem = "flex flex-col items-center gap-1 text-sm font-medium";
 const iconSize = "h-6 w-6";
@@ -27,7 +25,7 @@ export default function Header() {
           className={`pointer-events-auto flex items-center gap-10 px-12 py-3 ${pill}`}>
           <div className="relative group">
             <Link
-              href="/"
+              href="/discover"
               className={`flex items-center gap-2 text-sm font-medium text-gray-200 hover:text-white`}>
               <HomeIcon className={iconSize} /> Home
             </Link>
