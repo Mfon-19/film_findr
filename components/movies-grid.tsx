@@ -15,6 +15,7 @@ export default function MoviesGrid({ movies }: MoviesGridProps) {
       renderItem={(movie) => (
         <div key={movie.id} className="relative">
           <MovieCard
+            id={movie.id}
             src={movie.imgSrc}
             title={movie.title}
             rating={movie.rating}

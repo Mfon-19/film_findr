@@ -15,6 +15,7 @@ export default function TVGrid({ shows }: TVGridProps) {
       renderItem={(show) => (
         <div key={show.id} className="relative">
           <MovieCard
+            id={show.id}
             src={show.imgSrc}
             title={show.title}
             rating={show.rating}

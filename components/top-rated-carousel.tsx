@@ -42,16 +42,19 @@ const TopRatedCarousel = ({ movies }: { movies: Movie[] }) => {
         {/* Movies container */}
         <div
           ref={carouselRef}
-          className="flex gap-4 overflow-x-auto scrollbar-hide px-6 py-4 h-[300px]"
+          className="flex gap-4 overflow-x-auto scrollbar-hide px-6 py-4"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
           {movies?.map((movie: Movie) => (
-            <MovieCard
-              key={movie.id}
-              title={movie.title}
-              src={movie.imgSrc}
-              alt={movie.alt}
-              rating={movie.rating}
-            />
+            <div key={movie.id} className="flex-shrink-0 w-[180px]">
+              <MovieCard
+                id={movie.id}
+                title={movie.title}
+                src={movie.imgSrc}
+                alt={movie.alt}
+                rating={movie.rating}
+                description={movie.overview}
+              />
+            </div>
           ))}
         </div>
 

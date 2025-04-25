@@ -2,6 +2,7 @@ import Image from "next/image";
 import React from "react";
 import { IoMdStar } from "react-icons/io";
 import { FaPlay, FaPlus } from "react-icons/fa";
+import Link from "next/link";
 
 interface Props {
   src: string;
@@ -10,6 +11,7 @@ interface Props {
   description?: string;
   year?: number;
   alt?: string;
+  id?: number;
 }
 
 export default function MovieCard({
@@ -19,8 +21,9 @@ export default function MovieCard({
   description = "No description available.",
   year,
   alt = title,
+  id,
 }: Props) {
-  return (
+  const content = (
     <div className="group relative w-full cursor-pointer">
       {/* --- Visible Card Area (Scales on hover) --- */}
       <div className="overflow-hidden rounded-md shadow-md transition-all duration-300 ease-in-out group-hover:shadow-xl">
@@ -76,4 +79,10 @@ export default function MovieCard({
       </div>
     </div>
   );
+
+  if (id) {
+    return <Link href={`/movies/${id}`}>{content}</Link>;
+  }
+
+  return content;
 }
