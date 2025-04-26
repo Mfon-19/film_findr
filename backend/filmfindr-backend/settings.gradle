@@ -1,0 +1,3 @@
+rootProject.name = 'filmfindr-backend'
+
+include 'gateway-service', 'user-service', 'content-service'

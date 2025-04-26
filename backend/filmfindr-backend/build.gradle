@@ -1,0 +1,37 @@
+plugins {
+    id 'java'                                   // needed for sub-project config
+    id 'io.spring.dependency-management' version '1.1.5'
+}
+
+group   = 'com.filmfindr'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+}
+
+repositories {
+    mavenCentral()
+}
+
+/*
+ * Align all Spring dependencies across modules with the same BOM.
+ * Each sub-project still applies the Spring Boot plugin individually.
+ */
+dependencyManagement {
+    imports {
+        mavenBom 'org.springframework.boot:spring-boot-dependencies:3.3.0'
+    }
+}
+
+/* Common test library for every service */
+subprojects {
+    apply plugin: 'java'
+    repositories { mavenCentral() }
+
+    dependencies {
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    }
+
+    test { useJUnitPlatform() }   // JUnit 5 for all tests
+}

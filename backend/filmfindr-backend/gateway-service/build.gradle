@@ -1,0 +1,17 @@
+plugins {
+    id 'org.springframework.boot' version '3.3.0'
+    id 'io.spring.dependency-management'
+    id 'java'
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+}
+
+/* Optional: disable security and datasource auto-config for this stub */
+bootRun {
+    jvmArgs = [ '-Dspring.autoconfigure.exclude=\
+org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration,\
+org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration' ]
+}
