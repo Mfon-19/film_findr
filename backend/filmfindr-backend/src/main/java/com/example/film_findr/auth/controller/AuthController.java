@@ -19,7 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
  * Auth.js on the Next.js side can store them however it likes.
  */
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthController {
     private final UserService userService;

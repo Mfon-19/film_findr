@@ -1,6 +1,7 @@
 package com.example.film_findr.auth.service;
 
 import io.jsonwebtoken.*;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import io.jsonwebtoken.security.Keys;
@@ -25,7 +26,8 @@ public class JwtService {
 
     private Key key;
 
-    void init() {
+    @PostConstruct
+    private void init() {
         this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
