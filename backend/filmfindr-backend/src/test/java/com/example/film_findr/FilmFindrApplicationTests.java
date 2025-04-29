@@ -1,4 +1,4 @@
-package com.example.film_findr.Film.Findr;
+package com.example.film_findr;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
