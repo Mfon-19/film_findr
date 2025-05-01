@@ -29,9 +29,6 @@ public class AuthController {
      * <p>
      * Accepts a {@link RegisterRequest}, processes the registration,
      * and returns a {@link LoginResponse} with HTTP status {@code 201 Created}.
-     *
-     * @param request the registration details sent in the request body
-     * @return a {@link ResponseEntity} containing the login response and status
      */
     @PostMapping("/register")
     public ResponseEntity<LoginResponse> register(
@@ -48,9 +45,6 @@ public class AuthController {
      * <p>
      * Accepts a {@link LoginRequest}, processes the login,
      * and returns a {@link LoginResponse} with HTTP status {@code 200 OK}.
-     *
-     * @param request the login details sent in the request body
-     * @return a {@link ResponseEntity} containing the login response and status
      */
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(
@@ -65,10 +59,6 @@ public class AuthController {
      * <p>
      * Expects a Bearer token in the {@code Authorization} header.
      * Returns a new {@link LoginResponse} containing refreshed tokens.
-     *
-     * @param authHeader the Authorization header containing the refresh token
-     * @return a {@link ResponseEntity} with the new login response
-     * @throws ResponseStatusException if the Authorization header is missing or invalid
      */
     @PostMapping("/refresh")
     public ResponseEntity<LoginResponse> refresh(

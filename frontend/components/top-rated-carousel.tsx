@@ -1,6 +1,6 @@
 "use client";
 
-import { Movie } from "@/utils/types";
+import { Movie } from "@/lib/types";
 import React, { useRef } from "react";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 import MovieCard from "./movie-card";

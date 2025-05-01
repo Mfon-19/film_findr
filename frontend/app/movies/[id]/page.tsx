@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { IoMdStar } from "react-icons/io";
 import { FaPlay, FaBookmark } from "react-icons/fa";
-import { movieData } from "@/utils/movie-data";
+import { movieData } from "@/lib/movie-data";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import SimilarMovies from "@/components/similar-movies";

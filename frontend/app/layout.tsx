@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Toaster } from "sonner";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/header";
@@ -32,6 +33,7 @@ export default function RootLayout({
           <div className="flex flex-col">
             <Header />
             {children}
+            <Toaster />
           </div>
         </body>
       </html>

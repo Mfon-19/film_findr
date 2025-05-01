@@ -2,11 +2,11 @@
 "use client";
 
 import { useState } from "react";
-import { movieData } from "@/utils/movie-data";
+import { movieData } from "@/lib/movie-data";
 import MoviesPageHeader from "@/components/movies-page-header";
 import PageFilter from "@/components/page-filter";
 import MoviesGrid from "@/components/movies-grid";
-import { Movie } from "@/utils/types";
+import { Movie } from "@/lib/types";
 
 type Genre =
   | "Action"

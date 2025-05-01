@@ -2,10 +2,10 @@
 "use client";
 
 import { useState } from "react";
-import { movieData as tvData } from "@/utils/movie-data";
+import { movieData as tvData } from "@/lib/movie-data";
 import PageFilter from "@/components/page-filter";
 import TVGrid from "@/components/tv-grid";
-import { Movie } from "@/utils/types";
+import { Movie } from "@/lib/types";
 import TvPageHeader from "@/components/tv-page-header";
 
 type Genre =

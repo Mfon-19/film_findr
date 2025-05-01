@@ -11,8 +11,18 @@
         <module name="filmfindr-backend.main" />
         <module name="filmfindr-backend.test" />
       </profile>
+      <profile name="Annotation profile for Film-Findr" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
+        </processorPath>
+        <module name="Film-Findr" />
+      </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="filmfindr-backend" target="21" />
       <module name="filmfindr-backend.content-service.main" target="21" />
       <module name="filmfindr-backend.content-service.test" target="21" />
       <module name="filmfindr-backend.gateway-service.main" target="21" />

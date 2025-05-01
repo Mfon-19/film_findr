@@ -5,8 +5,8 @@ import React, { useState, useEffect } from "react";
 import { FaPlay } from "react-icons/fa";
 import { HiOutlineInformationCircle } from "react-icons/hi";
 import TopRatedCarousel from "./top-rated-carousel";
-import { heroData } from "@/utils/hero-data";
-import { movieData } from "@/utils/movie-data";
+import { heroData } from "@/lib/hero-data";
+import { movieData } from "@/lib/movie-data";
 
 const HeroSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);

@@ -1,6 +1,6 @@
 "use client";
 
-import { Movie } from "@/utils/types";
+import { Movie } from "@/lib/types";
 import MovieCard from "./movie-card";
 import EntityGrid from "./entity-grid";
 

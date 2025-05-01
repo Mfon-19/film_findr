@@ -1,4 +1,4 @@
-import { movieData as showData } from "@/utils/movie-data";
+import { movieData as showData } from "@/lib/movie-data";
 import MovieCard from "./movie-card";
 import Link from "next/link";
 
