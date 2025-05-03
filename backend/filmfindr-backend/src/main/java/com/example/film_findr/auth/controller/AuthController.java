@@ -62,14 +62,22 @@ public class AuthController {
      */
     @PostMapping("/refresh")
     public ResponseEntity<LoginResponse> refresh(
-            @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader
-    ) {
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
+
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing Bearer refresh token");
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Missing Bearer refresh token");
         }
+
         String refreshToken = authHeader.substring("Bearer ".length()).trim();
 
-        LoginResponse loginResponse = userService.refresh(refreshToken);
-        return ResponseEntity.ok(loginResponse);
+        try {
+            LoginResponse loginResponse = userService.refresh(refreshToken);
+            return ResponseEntity.ok(loginResponse);
+
+        } catch (Exception e) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED, "Token is expired or invalid");
+        }
     }
 }
