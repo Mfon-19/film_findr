@@ -69,7 +69,7 @@ public class UserService {
     }
 
     private LoginResponse buildTokens(User user) {
-        Duration accessTtl = Duration.ofMinutes(15);
+        Duration accessTtl = Duration.ofDays(7);
         Duration refreshTtl = Duration.ofDays(7);
 
         String accessToken = jwtService.issueAccessToken(

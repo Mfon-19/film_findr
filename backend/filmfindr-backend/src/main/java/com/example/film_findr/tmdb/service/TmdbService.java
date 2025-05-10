@@ -33,7 +33,7 @@ public class TmdbService {
     //@Cacheable("movieGenres")
     public Mono<Map<Integer, String>> genreMap() {
         return webClient.get()
-                .uri("/genre/movie/list")
+                .uri("/genre/movie/list?api_key={apiKey}", apiKey)
                 .retrieve()
                 .bodyToMono(GenreList.class)
                 .map(gl -> gl.genres().stream().collect(Collectors.toMap(
@@ -60,7 +60,7 @@ public class TmdbService {
     //@Cacheable("tmdbConfig")
     public Mono<ImagesCfg> fetchImageConfig() {
         return webClient.get()
-                .uri("/configuration")
+                .uri("/configuration?api_key={apiKey}", apiKey)
                 .retrieve()
                 .bodyToMono(CfgResponse.class)
                 .map(CfgResponse::images);

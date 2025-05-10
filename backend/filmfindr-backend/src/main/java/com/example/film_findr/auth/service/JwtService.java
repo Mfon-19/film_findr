@@ -1,6 +1,7 @@
 package com.example.film_findr.auth.service;
 
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.io.Decoders;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,8 @@ public class JwtService {
 
     @PostConstruct
     private void init() {
-        this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+        byte[] keyBytes = Decoders.BASE64.decode(secret);
+        key = Keys.hmacShaKeyFor(keyBytes);
     }
 
     public String issueAccessToken(UUID userId, String email, String roles, Duration ttl) {
@@ -82,6 +84,6 @@ public class JwtService {
             builder.claim(CLAIM_ROLES, roles);
         }
 
-        return builder.signWith(key).compact();
+        return builder.signWith(key, SignatureAlgorithm.HS256).compact();
     }
 }
