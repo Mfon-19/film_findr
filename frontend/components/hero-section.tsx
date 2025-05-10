@@ -4,11 +4,11 @@ import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import { FaPlay } from "react-icons/fa";
 import { HiOutlineInformationCircle } from "react-icons/hi";
-import TopRatedCarousel from "./top-rated-carousel";
+import TopRatedCarousel from "./trending-movies-carousel";
 import { heroData } from "@/lib/hero-data";
-import { movieData } from "@/lib/movie-data";
+import { MovieResult } from "@/lib/types";
 
-const HeroSection = () => {
+const HeroSection = ({ movieData }: { movieData: MovieResult[] }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const currentFeature = heroData[currentIndex];

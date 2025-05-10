@@ -4,10 +4,16 @@ import "next-auth";
 export interface Movie {
   id: number;
   title: string;
-  imgSrc: string;
   alt: string;
-  rating: number;
+  imgSrc: string;
   overview: string;
+}
+
+export interface MovieResult extends Movie {
+  posterPath: string;
+  releaseDate: string;
+  voteAverage: number;
+  genreIds: string[];
 }
 
 export interface User {
@@ -39,6 +45,7 @@ export interface RegisterRequest {
 declare module "next-auth" {
   interface Session {
     accessToken?: string;
+    accessTokenExpires?: string;
     refreshToken?: string;
     user: {
       id: string;
@@ -49,6 +56,7 @@ declare module "next-auth" {
 
   interface User {
     accessToken?: string;
+    accessTokenExpires?: string;
     refreshToken?: string;
   }
 }

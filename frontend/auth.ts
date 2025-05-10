@@ -2,7 +2,7 @@ import NextAuth from "next-auth/next";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 import { authSchema } from "./lib/zod";
-import { login } from "./lib/actions";
+import { login, refreshAccessToken } from "./lib/actions";
 import { NextAuthOptions } from "next-auth";
 
 export const authOptions = {
@@ -20,6 +20,9 @@ export const authOptions = {
 
           const response = await login({ email, password });
           if (!response) return null;
+          console.log(
+            `Login response from spring: ${JSON.stringify(response)}`
+          );
 
           return {
             id: response.user.id.toString(),
@@ -27,6 +30,7 @@ export const authOptions = {
             username: response.user.username,
             accessToken: response.accessToken,
             refreshToken: response.refreshToken,
+            accessTokenExpires: Date.now() + response.accessExpiresIn * 1000,
           };
         } catch (error) {
           console.error("Authentication error: ", error);
@@ -39,7 +43,8 @@ export const authOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
   ],
-  session: { strategy: "jwt" },
+  secret: process.env.NEXTAUTH_SECRET,
+  session: { strategy: "jwt", maxAge: 30 * 24 * 60 * 60 },
   pages: {
     signIn: "/login",
   },
@@ -49,14 +54,20 @@ export const authOptions = {
         token.id = user.id.toString();
         token.accessToken = user.accessToken!;
         token.refreshToken = user.refreshToken!;
+        token.accessTokenExpires = user.accessTokenExpires;
+        return token;
       }
-      return token;
+      
+      if (Date.now() < (token.accessTokenExpires as number) - 60_000) {
+        return token;
+      }
+      return await refreshAccessToken(token);
     },
     session: async ({ session, token }) => {
       if (token) {
         session.user.id = token.id as string;
-        session.accessToken = token.accessToken!;
-        session.refreshToken = token.refreshToken!;
+        session.accessToken = token.accessToken as string;
+        session.accessTokenExpires = token.accessTokenExpires as string;
       }
       return session;
     },

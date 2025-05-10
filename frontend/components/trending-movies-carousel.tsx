@@ -1,11 +1,11 @@
 "use client";
 
-import { Movie } from "@/lib/types";
+import { MovieResult } from "@/lib/types";
 import React, { useRef } from "react";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 import MovieCard from "./movie-card";
 
-const TopRatedCarousel = ({ movies }: { movies: Movie[] }) => {
+const TrendingMoviesCarousel = ({ movies }: { movies: MovieResult[] }) => {
   const carouselRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: "left" | "right") => {
@@ -44,14 +44,14 @@ const TopRatedCarousel = ({ movies }: { movies: Movie[] }) => {
           ref={carouselRef}
           className="flex gap-4 overflow-x-auto scrollbar-hide px-6 py-4"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
-          {movies?.map((movie: Movie) => (
+          {movies?.map((movie: MovieResult) => (
             <div key={movie.id} className="flex-shrink-0 w-[180px]">
               <MovieCard
                 id={movie.id}
                 title={movie.title}
-                src={movie.imgSrc}
+                src={movie.posterPath}
                 alt={movie.alt}
-                rating={movie.rating}
+                rating={movie.voteAverage}
                 description={movie.overview}
               />
             </div>
@@ -72,4 +72,4 @@ const TopRatedCarousel = ({ movies }: { movies: Movie[] }) => {
   );
 };
 
-export default TopRatedCarousel;
+export default TrendingMoviesCarousel;
