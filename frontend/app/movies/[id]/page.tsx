@@ -1,28 +1,22 @@
 import Image from "next/image";
 import { IoMdStar } from "react-icons/io";
 import { FaPlay, FaBookmark } from "react-icons/fa";
-import { movieData } from "@/lib/movie-data";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import SimilarMovies from "@/components/similar-movies";
+import { getMovieById } from "@/lib/actions";
 
-export async function generateMetadata({ params }: { params: { id: string } }) {
-  const movie = movieData.find((m) => m.id === parseInt(params.id));
-
-  if (!movie) {
-    return {
-      title: "Movie Not Found",
-    };
-  }
-
-  return {
-    title: `${movie.title} | Film Findr`,
-    description: movie.overview,
-  };
+async function getMovie(id: string) {
+  return getMovieById(id);
 }
 
-export default function MoviePage({ params }: { params: { id: string } }) {
-  const movie = movieData.find((m) => m.id === parseInt(params.id));
+export default async function MoviePage({
+  params,
+}: {
+  params: { id: string };
+}) {
+  const id = await params.id;
+  const movie = await getMovie(id);
 
   if (!movie) {
     notFound();
@@ -35,7 +29,7 @@ export default function MoviePage({ params }: { params: { id: string } }) {
 
       <div className="relative h-[70vh] w-full mt-0">
         <Image
-          src={movie.imgSrc}
+          src={movie.backdropPath}
           alt={movie.alt}
           fill
           className="object-cover brightness-50"
@@ -48,7 +42,7 @@ export default function MoviePage({ params }: { params: { id: string } }) {
           <div className="container mx-auto flex flex-col md:flex-row gap-8 items-end">
             <div className="relative h-64 w-44 overflow-hidden rounded-md shadow-xl hidden md:block">
               <Image
-                src={movie.imgSrc}
+                src={movie.posterPath}
                 alt={movie.alt}
                 fill
                 className="object-cover"
@@ -63,11 +57,12 @@ export default function MoviePage({ params }: { params: { id: string } }) {
               <div className="flex items-center gap-2 mb-4">
                 <div className="flex items-center text-yellow-400">
                   <IoMdStar className="w-5 h-5" />
-                  <span className="ml-1 font-medium">
-                    {movie.rating.toFixed(1)}
-                  </span>
+                  <span className="ml-1 font-medium">{movie.voteAverage}</span>
                 </div>
-                <span className="text-gray-400">• 2023 • 2h 49m</span>
+                <span className="text-gray-400">
+                  • {new Date(movie.releaseDate).getFullYear()} •{" "}
+                  {Math.floor(movie.runtime / 60)}h {movie.runtime % 60}m
+                </span>
               </div>
 
               <p className="text-lg text-gray-200 mb-6 max-w-3xl">
@@ -96,14 +91,7 @@ export default function MoviePage({ params }: { params: { id: string } }) {
             <h2 className="text-2xl font-semibold text-white mb-6">
               About the Movie
             </h2>
-            <p className="text-gray-300 mb-8">
-              {movie.overview}
-              {/* Extended description would go here */}
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
-              euismod, nisi vel consectetur interdum, nisl nisi consectetur
-              purus, eget porttitor nisl nisl sit amet magna. Fusce iaculis
-              consectetur risus, id consectetur nisl nisl sit amet magna.
-            </p>
+            <p className="text-gray-300 mb-8">{movie.overview}</p>
 
             <div className="mb-8">
               <h3 className="text-xl font-semibold text-white mb-4">Cast</h3>
@@ -126,7 +114,13 @@ export default function MoviePage({ params }: { params: { id: string } }) {
             <dl className="space-y-4 text-gray-300">
               <div>
                 <dt className="font-medium text-gray-400">Release Date</dt>
-                <dd>July 21, 2023</dd>
+                <dd>
+                  {new Date(movie.releaseDate).toLocaleDateString("en-US", {
+                    month: "long",
+                    day: "numeric",
+                    year: "numeric",
+                  })}
+                </dd>
               </div>
               <div>
                 <dt className="font-medium text-gray-400">Director</dt>
@@ -134,15 +128,17 @@ export default function MoviePage({ params }: { params: { id: string } }) {
               </div>
               <div>
                 <dt className="font-medium text-gray-400">Runtime</dt>
-                <dd>2h 49m</dd>
+                <dd>
+                  {Math.floor(movie.runtime / 60)}h {movie.runtime % 60}m
+                </dd>
               </div>
               <div>
                 <dt className="font-medium text-gray-400">Genre</dt>
-                <dd>Science Fiction, Drama, Adventure</dd>
+                <dd>{movie.genres?.join(", ") || "Not specified"}</dd>
               </div>
               <div>
                 <dt className="font-medium text-gray-400">Original Language</dt>
-                <dd>English</dd>
+                <dd>{movie.language}</dd>
               </div>
             </dl>
           </div>
@@ -164,4 +160,14 @@ export default function MoviePage({ params }: { params: { id: string } }) {
       </div>
     </main>
   );
+}
+
+export async function generateMetadata({ params }: { params: { id: string } }) {
+  const id = await params.id;
+  const movie = await getMovie(id);
+
+  return {
+    title: movie?.title,
+    description: movie?.overview,
+  };
 }

@@ -33,7 +33,7 @@ export default function SimilarMovies({
               id={movie.id}
               src={movie.imgSrc}
               title={movie.title}
-              rating={movie.rating}
+              rating={3}
               description={movie.overview}
               alt={movie.alt}
             />

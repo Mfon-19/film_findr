@@ -1,16 +1,20 @@
 package com.example.film_findr.tmdb.service;
 
+import com.example.film_findr.exceptions.DownstreamServiceException;
 import com.example.film_findr.tmdb.dto.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class TmdbService {
     private final WebClient webClient;
@@ -72,5 +76,36 @@ public class TmdbService {
                 : cfg.posterSizes().getLast();
 
         return cfg.secureBaseUrl() + size + posterPath;
+    }
+
+    public Mono<MovieDetailsResult> getMovieById(String movieId) {
+        return webClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/movie/{id}")
+                        .queryParam("api_key", apiKey)
+                        .build(movieId))
+                .retrieve()
+                .bodyToMono(MovieDetailsResult.class)
+                .onErrorMap(
+                        WebClientResponseException.class,
+                        ex -> new DownstreamServiceException(
+                                ex.getStatusCode().value(), ex.getResponseBodyAsString()
+                        )
+                );
+    }
+
+    public Mono<MovieDetailsResultEnriched> moviesByIdWithPoster(String movieId) {
+        return Mono.zip(getMovieById(movieId), fetchImageConfig())
+                .map(tuple -> {
+                    var movie = tuple.getT1();
+                    var imgCfg = tuple.getT2();
+                    return new MovieDetailsResultEnriched(
+                            movie.id(), movie.title(), movie.overview(), movie.adult(),
+                            movie.runtime(), buildPosterUrl(movie.backdropPath(), imgCfg, "w1280"),
+                            buildPosterUrl(movie.posterPath(), imgCfg, "w500"), movie.releaseDate(),
+                            movie.voteAverage(), movie.genres().stream().map(GenreDTO::name).toList(),
+                            movie.spokenLanguages().stream().map(Language::englishName).toList().stream().findFirst().orElse(null)
+                    );
+                });
     }
 }

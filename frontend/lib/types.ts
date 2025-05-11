@@ -16,6 +16,14 @@ export interface MovieResult extends Movie {
   genreIds: string[];
 }
 
+export interface MovieDetails extends MovieResult {
+  adult: boolean;
+  runtime: number;
+  backdropPath: string;
+  genres: string[];
+  language: string;
+}
+
 export interface User {
   id: UUID;
   username: string;

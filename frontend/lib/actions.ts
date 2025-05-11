@@ -4,11 +4,13 @@ import { authOptions } from "@/auth";
 import {
   LoginRequest,
   LoginResponse,
+  MovieDetails,
   MovieResult,
   RegisterRequest,
 } from "./types";
 import { getServerSession } from "next-auth";
 import { JWT } from "next-auth/jwt";
+import { json } from "stream/consumers";
 
 const API_URL = "http://localhost:8080/api";
 
@@ -82,7 +84,6 @@ export async function refreshAccessToken(token: JWT) {
 
 export async function getTrendingMovies() {
   const session = await getServerSession(authOptions);
-  console.log(`Server session: ${JSON.stringify(session)}`)
   try {
     const response = await fetch(`${API_URL}/movies/trending`, {
       headers: {
@@ -94,5 +95,27 @@ export async function getTrendingMovies() {
     return result;
   } catch (error) {
     console.error(`Failed to fetch trending movies: ${error}`);
+  }
+}
+
+export async function getMovieById(id: string) {
+  const session = await getServerSession(authOptions);
+  try {
+    const response = await fetch(`${API_URL}/movies/movie-details`, {
+      method: "POST",
+      headers: {
+        authorization: `Bearer ${session?.accessToken?.toString()}`,
+        "content-type": "application/json"
+      },
+      body: JSON.stringify({ id: id }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Error fetching movie details");
+    }
+    const result: MovieDetails = await response.json();
+    return result;
+  } catch (error) {
+    console.error(`Failed to fetch movie by id: ${error}`);
   }
 }
