@@ -4,9 +4,9 @@ import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import { FaPlay } from "react-icons/fa";
 import { HiOutlineInformationCircle } from "react-icons/hi";
-import TopRatedCarousel from "./trending-movies-carousel";
 import { heroData } from "@/lib/hero-data";
 import { MovieResult } from "@/lib/types";
+import TopRatedMoviesCarousel from "./top-rated-movies-carousel";
 
 const HeroSection = ({ movieData }: { movieData: MovieResult[] }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -109,7 +109,7 @@ const HeroSection = ({ movieData }: { movieData: MovieResult[] }) => {
       </section>
 
       <section className="-mt-12 md:-mt-16 relative z-1">
-        <TopRatedCarousel movies={movieData} />
+        <TopRatedMoviesCarousel movies={movieData} />
       </section>
     </main>
   );

@@ -6,8 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="aa3cbd9c-cc61-4959-9aee-b9375eb6f798" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/filmfindr-backend/.gradle/8.13/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/filmfindr-backend/.gradle/8.13/checksums/checksums.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/filmfindr-backend/.gradle/8.13/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/filmfindr-backend/.gradle/8.13/checksums/sha1-checksums.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/filmfindr-backend/.gradle/8.13/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/filmfindr-backend/.gradle/8.13/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/filmfindr-backend/.gradle/8.13/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/filmfindr-backend/.gradle/8.13/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/filmfindr-backend/.gradle/8.13/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/filmfindr-backend/.gradle/8.13/fileHashes/fileHashes.bin" afterDir="false" />
@@ -16,11 +14,10 @@
       <change beforePath="$PROJECT_DIR$/filmfindr-backend/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/filmfindr-backend/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/filmfindr-backend/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/filmfindr-backend/.gradle/file-system.probe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/filmfindr-backend/src/main/java/com/example/film_findr/tmdb/controller/MovieController.java" beforeDir="false" afterPath="$PROJECT_DIR$/filmfindr-backend/src/main/java/com/example/film_findr/tmdb/controller/MovieController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/filmfindr-backend/src/main/java/com/example/film_findr/tmdb/dto/MovieResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/filmfindr-backend/src/main/java/com/example/film_findr/tmdb/dto/MovieResult.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/filmfindr-backend/src/main/java/com/example/film_findr/tmdb/service/TmdbService.java" beforeDir="false" afterPath="$PROJECT_DIR$/filmfindr-backend/src/main/java/com/example/film_findr/tmdb/service/TmdbService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/filmfindr-backend/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/filmfindr-backend/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/app/discover/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/app/discover/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/components/hero-section.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/components/hero-section.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../frontend/lib/actions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/lib/actions.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/lib/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/lib/types.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -173,7 +170,7 @@
       <workItem from="1746068985444" duration="1740000" />
       <workItem from="1746236331074" duration="43209000" />
       <workItem from="1746672714995" duration="5085000" />
-      <workItem from="1746842490488" duration="18251000" />
+      <workItem from="1746842490488" duration="26654000" />
     </task>
     <servers />
   </component>

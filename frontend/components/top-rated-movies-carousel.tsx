@@ -5,7 +5,7 @@ import React, { useRef } from "react";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 import MovieCard from "./movie-card";
 
-const TrendingMoviesCarousel = ({ movies }: { movies: MovieResult[] }) => {
+const TopRatedMoviesCarousel = ({ movies }: { movies: MovieResult[] }) => {
   const carouselRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: "left" | "right") => {
@@ -25,7 +25,7 @@ const TrendingMoviesCarousel = ({ movies }: { movies: MovieResult[] }) => {
 
   return (
     <div className="flex flex-col gap-4 ms-[46px]">
-      <h2 className="text-2xl font-semibold text-white px-6">Trending</h2>
+      <h2 className="text-2xl font-semibold text-white px-6">Top Rated</h2>
 
       {/* Carousel Container */}
       <div className="relative">
@@ -72,4 +72,4 @@ const TrendingMoviesCarousel = ({ movies }: { movies: MovieResult[] }) => {
   );
 };
 
-export default TrendingMoviesCarousel;
+export default TopRatedMoviesCarousel;

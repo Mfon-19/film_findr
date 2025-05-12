@@ -1,17 +1,20 @@
 import HeroSection from "@/components/hero-section";
-import TopRatedCarousel from "@/components/trending-movies-carousel";
-import { getTrendingMovies } from "@/lib/actions";
+import TopRatedMoviesCarousel from "@/components/top-rated-movies-carousel";
+import TrendingMoviesCarousel from "@/components/trending-movies-carousel";
+import { getTopRatedMovies, getTrendingMovies } from "@/lib/actions";
 import React from "react";
 
 const Page = async () => {
-  const movieData = await getTrendingMovies();
-  if (!movieData) return null;
+  const trendingMovies = await getTrendingMovies();
+  const topRatedMovies = await getTopRatedMovies();
+  if (!trendingMovies || !topRatedMovies) return null;
+
   return (
     <div className="flex flex-col">
-      <HeroSection movieData={movieData}/>
+      <HeroSection movieData={topRatedMovies} />
       <div className="bg-[#00050d]">
-        <TopRatedCarousel movies={movieData} />
-        <TopRatedCarousel movies={movieData} />
+        <TrendingMoviesCarousel movies={trendingMovies} />
+        <TopRatedMoviesCarousel movies={topRatedMovies} />
       </div>
     </div>
   );

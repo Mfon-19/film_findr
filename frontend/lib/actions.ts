@@ -105,7 +105,7 @@ export async function getMovieById(id: string) {
       method: "POST",
       headers: {
         authorization: `Bearer ${session?.accessToken?.toString()}`,
-        "content-type": "application/json"
+        "content-type": "application/json",
       },
       body: JSON.stringify({ id: id }),
     });
@@ -117,5 +117,25 @@ export async function getMovieById(id: string) {
     return result;
   } catch (error) {
     console.error(`Failed to fetch movie by id: ${error}`);
+  }
+}
+
+export async function getTopRatedMovies() {
+  const session = await getServerSession(authOptions);
+  try {
+    const response = await fetch(`${API_URL}/movies/top-rated`, {
+      headers: {
+        authorization: `Bearer ${session?.accessToken?.toString()}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Error fetching top rated movies");
+    }
+
+    const result: MovieResult[] = await response.json();
+    return result;
+  } catch (error) {
+    console.error(`Failed to fetch top rated movies: ${error}`);
   }
 }

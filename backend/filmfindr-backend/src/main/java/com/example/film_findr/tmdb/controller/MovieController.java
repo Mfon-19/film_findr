@@ -43,6 +43,26 @@ public class MovieController {
                                 HttpStatus.UNAUTHORIZED, "Token is expired or invalid", e)));
     }
 
+    @GetMapping("/top-rated")
+    public Mono<ResponseEntity<List<MovieResultEnriched>>> topRated(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return Mono.error(new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Missing Bearer access token"));
+        }
+
+        String token = authHeader.substring("Bearer ".length()).trim();
+
+        return Mono.fromCallable(() -> jwt.parseAccessToken(token))
+                .onErrorMap(JwtException.class,
+                        ex -> new JwtException("Token invalid or expired", ex))
+                .flatMap(ok -> tmdb.topRatedWithNames())
+                .map(ResponseEntity::ok)
+                .onErrorMap(DownstreamServiceException.class, ex ->
+                        new ResponseStatusException(HttpStatus.BAD_GATEWAY, "TMDB request failed: " + ex.getMessage(), ex));
+    }
+
     @PostMapping("/movie-details")
     public Mono<ResponseEntity<MovieDetailsResultEnriched>> movieDetails(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader, @RequestBody Map<String, String> req

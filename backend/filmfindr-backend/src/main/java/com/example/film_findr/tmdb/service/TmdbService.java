@@ -34,6 +34,14 @@ public class TmdbService {
                 .map(TrendingResponse::results);
     }
 
+    public Mono<List<MovieResult>> getTopRatedMovies() {
+        return webClient.get()
+                .uri("/movie/top_rated?api_key={apiKey}", apiKey)
+                .retrieve()
+                .bodyToMono(TrendingResponse.class)
+                .map(TrendingResponse::results);
+    }
+
     //@Cacheable("movieGenres")
     public Mono<Map<Integer, String>> genreMap() {
         return webClient.get()
@@ -61,6 +69,21 @@ public class TmdbService {
                 });
     }
 
+    public Mono<List<MovieResultEnriched>> topRatedWithNames() {
+        return Mono.zip(getTopRatedMovies(), genreMap(), fetchImageConfig())
+                .map(tuple -> {
+                    var list = tuple.getT1();
+                    var id2nm = tuple.getT2();
+                    var imgCfg = tuple.getT3();
+                    return list.stream()
+                            .map(m -> new MovieResultEnriched(
+                                    m.id(), m.title(), m.overview(),
+                                    buildPosterUrl(m.posterPath(), imgCfg, "w500"), m.releaseDate(), m.voteAverage(),
+                                    m.genreIds().stream().map(id2nm::get)
+                                            .toList()
+                            )).toList();
+                });
+    }
     //@Cacheable("tmdbConfig")
     public Mono<ImagesCfg> fetchImageConfig() {
         return webClient.get()
