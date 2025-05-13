@@ -10,7 +10,6 @@ import {
 } from "./types";
 import { getServerSession } from "next-auth";
 import { JWT } from "next-auth/jwt";
-import { json } from "stream/consumers";
 
 const API_URL = "http://localhost:8080/api";
 
@@ -117,6 +116,18 @@ export async function getMovieById(id: string) {
     return result;
   } catch (error) {
     console.error(`Failed to fetch movie by id: ${error}`);
+  }
+}
+
+export async function getMoviesById(ids: string[]) {
+  try {
+    const response = await Promise.all(ids.map((id) => getMovieById(id)));
+    const movies = response.filter(
+      (movie): movie is MovieDetails => movie !== undefined
+    );
+    return movies;
+  } catch (error) {
+    console.error(`Failed to fetch movies by id: ${error}`);
   }
 }
 

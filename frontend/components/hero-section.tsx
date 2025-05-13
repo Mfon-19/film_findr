@@ -4,11 +4,18 @@ import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import { FaPlay } from "react-icons/fa";
 import { HiOutlineInformationCircle } from "react-icons/hi";
-import { heroData } from "@/lib/hero-data";
-import { MovieResult } from "@/lib/types";
+import { MovieDetails, MovieResult } from "@/lib/types";
 import TopRatedMoviesCarousel from "./top-rated-movies-carousel";
 
-const HeroSection = ({ movieData }: { movieData: MovieResult[] }) => {
+export interface HeroSectionProps {
+  movieData: MovieResult[];
+  heroData: MovieDetails[];
+}
+
+const HeroSection = (props: HeroSectionProps) => {
+  const movieData = props.movieData;
+  const heroData = props.heroData;
+  
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const currentFeature = heroData[currentIndex];
@@ -42,8 +49,8 @@ const HeroSection = ({ movieData }: { movieData: MovieResult[] }) => {
             isTransitioning ? "opacity-0 scale-110" : "opacity-100 scale-100"
           }`}>
           <Image
-            src={currentFeature.imgSrc}
-            alt={currentFeature.alt}
+            src={currentFeature.backdropPath}
+            alt={currentFeature.alt || "movie poster image"}
             className="absolute inset-0 h-full w-full object-cover"
             width={1920}
             height={1080}
