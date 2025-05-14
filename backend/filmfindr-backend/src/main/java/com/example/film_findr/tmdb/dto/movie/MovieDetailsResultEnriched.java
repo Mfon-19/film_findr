@@ -1,9 +1,6 @@
-package com.example.film_findr.tmdb.dto;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+package com.example.film_findr.tmdb.dto.movie;
 
 import java.util.List;
-import java.util.Map;
 
 public record MovieDetailsResultEnriched (
         int id,

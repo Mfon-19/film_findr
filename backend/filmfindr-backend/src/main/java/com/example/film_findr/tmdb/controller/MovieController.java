@@ -2,8 +2,8 @@ package com.example.film_findr.tmdb.controller;
 
 import com.example.film_findr.auth.service.JwtService;
 import com.example.film_findr.exceptions.DownstreamServiceException;
-import com.example.film_findr.tmdb.dto.MovieDetailsResultEnriched;
-import com.example.film_findr.tmdb.dto.MovieResultEnriched;
+import com.example.film_findr.tmdb.dto.movie.MovieDetailsResultEnriched;
+import com.example.film_findr.tmdb.dto.movie.MovieResultEnriched;
 import com.example.film_findr.tmdb.service.TmdbService;
 import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;

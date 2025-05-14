@@ -1,9 +1,10 @@
-package com.example.film_findr.tmdb.dto;
+package com.example.film_findr.tmdb.dto.movie;
 
+import com.example.film_findr.tmdb.dto.GenreDTO;
+import com.example.film_findr.tmdb.dto.Language;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
-import java.util.Map;
 
 public record MovieDetailsResult (
         int id,

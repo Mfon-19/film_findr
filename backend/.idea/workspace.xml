@@ -5,14 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="aa3cbd9c-cc61-4959-9aee-b9375eb6f798" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2025-05-09T193014.403.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2025-05-09T193421.403.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/http-client.cookies" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/http-requests-log.http" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/filmfindr-backend.main.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/filmfindr-backend/.gradle/8.13/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/filmfindr-backend/.gradle/8.13/executionHistory/executionHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/filmfindr-backend/.gradle/8.13/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/filmfindr-backend/.gradle/8.13/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/filmfindr-backend/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/filmfindr-backend/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/filmfindr-backend/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/filmfindr-backend/.gradle/file-system.probe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/app/discover/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/app/discover/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/components/hero-section.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/components/hero-section.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/lib/actions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/lib/actions.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -91,7 +92,7 @@
     "Spring Boot.FilmFindrApplication.executor": "Run",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/mfone/Desktop/Programs/film_findr/backend",
+    "last_opened_file_path": "C:/Users/mfone/Desktop/Programs/film_findr/backend/filmfindr-backend",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -166,6 +167,10 @@
       <workItem from="1746236331074" duration="43209000" />
       <workItem from="1746672714995" duration="5085000" />
       <workItem from="1746842490488" duration="40286000" />
+      <workItem from="1747263702793" duration="113000" />
+      <workItem from="1747263821310" duration="6000" />
+      <workItem from="1747263857141" duration="71000" />
+      <workItem from="1747263961450" duration="115000" />
     </task>
     <servers />
   </component>

@@ -1,4 +1,4 @@
-package com.example.film_findr.tmdb.dto;
+package com.example.film_findr.tmdb.dto.movie;
 
 import java.util.List;
 
