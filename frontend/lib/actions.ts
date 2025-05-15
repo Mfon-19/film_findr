@@ -7,6 +7,7 @@ import {
   MovieDetails,
   MovieResult,
   RegisterRequest,
+  Show,
 } from "./types";
 import { getServerSession } from "next-auth";
 import { JWT } from "next-auth/jwt";
@@ -148,5 +149,21 @@ export async function getTopRatedMovies() {
     return result;
   } catch (error) {
     console.error(`Failed to fetch top rated movies: ${error}`);
+  }
+}
+
+export async function getTrendingShows() {
+  const session = await getServerSession(authOptions);
+  try {
+    const response = await fetch(`${API_URL}/tv/trending`, {
+      headers: {
+        authorization: `Bearer ${session?.accessToken?.toString()}`,
+      },
+    });
+
+    const result: Show[] = await response.json();
+    return result;
+  } catch (error) {
+    console.error(`Failed to fetch trending movies: ${error}`);
   }
 }

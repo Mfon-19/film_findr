@@ -76,3 +76,16 @@ declare module "next-auth/jwt" {
     refreshToken: string;
   }
 }
+
+export interface Show {
+  id: number;
+  name: string;
+  adult: boolean;
+  overview: string;
+  originalLanguage: string;
+  posterPath: string;
+  backdropPath: string;
+  alt?: string;
+  genres: string[];
+  voteAverage: number;
+}
