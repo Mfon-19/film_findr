@@ -116,7 +116,7 @@ const HeroSection = (props: HeroSectionProps) => {
       </section>
 
       <section className="-mt-12 md:-mt-16 relative z-1">
-        <TopRatedMoviesCarousel movies={movieData} />
+        {/* <TopRatedMoviesCarousel movies={movieData} /> */}
       </section>
     </main>
   );

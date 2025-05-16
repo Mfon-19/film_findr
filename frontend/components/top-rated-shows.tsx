@@ -1,11 +1,11 @@
 "use client";
 
-import { MovieResult } from "@/lib/types";
+import { Show } from "@/lib/types";
 import React, { useRef } from "react";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 import MovieCard from "./movie-card";
 
-const TopRatedMoviesCarousel = ({ movies }: { movies: MovieResult[] }) => {
+const TopRatedShowsCarousel = ({ shows }: { shows: Show[] }) => {
   const carouselRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: "left" | "right") => {
@@ -25,7 +25,7 @@ const TopRatedMoviesCarousel = ({ movies }: { movies: MovieResult[] }) => {
 
   return (
     <div className="flex flex-col gap-4 ms-[46px]">
-      <h2 className="text-2xl font-semibold text-white px-6">Top Rated Movies</h2>
+      <h2 className="text-2xl font-semibold text-white px-6">Top Rated Shows</h2>
 
       {/* Carousel Container */}
       <div className="relative">
@@ -39,20 +39,20 @@ const TopRatedMoviesCarousel = ({ movies }: { movies: MovieResult[] }) => {
           <IoChevronBack className="h-6 w-6 text-white" />
         </button>
 
-        {/* Movies container */}
+        {/* Shows container */}
         <div
           ref={carouselRef}
           className="flex gap-4 overflow-x-auto scrollbar-hide px-6 py-4"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
-          {movies?.map((movie: MovieResult) => (
-            <div key={movie.id} className="flex-shrink-0 w-[180px]">
+          {shows?.map((show: Show) => (
+            <div key={show.id} className="flex-shrink-0 w-[180px]">
               <MovieCard
-                id={movie.id}
-                title={movie.title}
-                src={movie.posterPath}
-                alt={movie.alt}
-                rating={movie.voteAverage}
-                description={movie.overview}
+                id={show.id}
+                title={show.name}
+                src={show.posterPath}
+                alt={show.alt}
+                rating={show.voteAverage}
+                description={show.overview}
               />
             </div>
           ))}
@@ -72,4 +72,4 @@ const TopRatedMoviesCarousel = ({ movies }: { movies: MovieResult[] }) => {
   );
 };
 
-export default TopRatedMoviesCarousel;
+export default TopRatedShowsCarousel;

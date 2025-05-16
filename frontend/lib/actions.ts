@@ -89,6 +89,7 @@ export async function getTrendingMovies() {
       headers: {
         authorization: `Bearer ${session?.accessToken?.toString()}`,
       },
+      next: { revalidate: 86_400 },
     });
 
     const result: MovieResult[] = await response.json();
@@ -107,6 +108,7 @@ export async function getMovieById(id: string) {
         authorization: `Bearer ${session?.accessToken?.toString()}`,
         "content-type": "application/json",
       },
+      next: { revalidate: 86_400 },
       body: JSON.stringify({ id: id }),
     });
 
@@ -139,6 +141,7 @@ export async function getTopRatedMovies() {
       headers: {
         authorization: `Bearer ${session?.accessToken?.toString()}`,
       },
+      next: { revalidate: 86_400 },
     });
 
     if (!response.ok) {
@@ -159,11 +162,33 @@ export async function getTrendingShows() {
       headers: {
         authorization: `Bearer ${session?.accessToken?.toString()}`,
       },
+      next: { revalidate: 86_400 },
     });
 
     const result: Show[] = await response.json();
     return result;
   } catch (error) {
     console.error(`Failed to fetch trending movies: ${error}`);
+  }
+}
+
+export async function getTopRatedShows() {
+  const session = await getServerSession(authOptions);
+  try {
+    const response = await fetch(`${API_URL}/tv/top-rated`, {
+      headers: {
+        authorization: `Bearer ${session?.accessToken?.toString()}`,
+      },
+      next: { revalidate: 86_400 },
+    });
+
+    if (!response.ok) {
+      throw new Error("Error fetching top rated shows");
+    }
+
+    const result: Show[] = await response.json();
+    return result;
+  } catch (error) {
+    console.error(`Failed to fetch top rated shows: ${error}`);
   }
 }
