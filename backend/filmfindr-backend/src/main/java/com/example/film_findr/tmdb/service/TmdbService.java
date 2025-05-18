@@ -3,9 +3,7 @@ package com.example.film_findr.tmdb.service;
 import com.example.film_findr.exceptions.DownstreamServiceException;
 import com.example.film_findr.tmdb.dto.*;
 import com.example.film_findr.tmdb.dto.movie.*;
-import com.example.film_findr.tmdb.dto.tv.TrendingTvResponse;
-import com.example.film_findr.tmdb.dto.tv.TvResult;
-import com.example.film_findr.tmdb.dto.tv.TvResultEnriched;
+import com.example.film_findr.tmdb.dto.tv.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -184,6 +182,28 @@ public class TmdbService {
                                     buildPosterUrl(m.backdropPath(), imgCfg, "w1280"),
                                     m.genreIds().stream().map(genre::get).toList(), m.voteAverage()
                             )).toList();
+                });
+    }
+
+    public Mono<TvDetails> getShowById(String showId) {
+        return webClient.get()
+                .uri("https://api.themoviedb.org/3/tv/{showId}?language=en-US&api_key={apiKey}", showId, apiKey)
+                .retrieve()
+                .bodyToMono(TvDetails.class);
+    }
+
+    public Mono<TvDetailsEnriched> showByIdWithPoster(String showId) {
+        return Mono.zip(getShowById(showId), fetchImageConfig())
+                .map(tuple -> {
+                    var show = tuple.getT1();
+                    var imgCfg = tuple.getT2();
+                    return new TvDetailsEnriched(
+                            show.id(), show.name(), show.adult(), show.overview(), show.createdBy(),
+                            show.firstAirDate(), show.lastAirDate(), show.numberOfEpisodes(), show.numberOfSeasons(),
+                            show.originalLanguage(), buildPosterUrl(show.posterPath(), imgCfg, "w500"),
+                            buildPosterUrl(show.backdropPath(), imgCfg, "w1280"), show.genres().stream().map(GenreDTO::name).toList(),
+                            show.voteAverage(), show.status()
+                    );
                 });
     }
 }
