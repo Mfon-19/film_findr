@@ -146,7 +146,7 @@ export default async function MoviePage({
 
         {/* Similar Movies section */}
         <div className="mt-12">
-          <SimilarMovies currentMovieId={movie.id} />
+          {/* <SimilarMovies currentMovieId={movie.id} /> */}
         </div>
       </div>
 

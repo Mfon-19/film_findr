@@ -5,7 +5,7 @@ import { useState } from "react";
 import { movieData as tvData } from "@/lib/movie-data";
 import PageFilter from "@/components/page-filter";
 import TVGrid from "@/components/tv-grid";
-import { Movie } from "@/lib/types";
+import { Movie, Show } from "@/lib/types";
 import TvPageHeader from "@/components/tv-page-header";
 
 type Genre =
@@ -29,7 +29,7 @@ type Genre =
   | "Western";
 
 export default function TVPage() {
-  const [filteredShows, setFilteredShows] = useState<Movie[]>(tvData);
+  const [filteredShows, setFilteredShows] = useState<Show[]>();
 
   const applyFilters = ({
     sortBy,

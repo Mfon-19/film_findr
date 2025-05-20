@@ -47,6 +47,7 @@ const TrendingShowsCarousel = ({ shows }: { shows: Show[] }) => {
           {shows?.map((show: Show) => (
             <div key={show.id} className="flex-shrink-0 w-[180px]">
               <MovieCard
+                type="tv"
                 id={show.id}
                 title={show.name}
                 src={show.posterPath}

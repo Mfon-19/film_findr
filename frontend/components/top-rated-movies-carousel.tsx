@@ -47,6 +47,7 @@ const TopRatedMoviesCarousel = ({ movies }: { movies: MovieResult[] }) => {
           {movies?.map((movie: MovieResult) => (
             <div key={movie.id} className="flex-shrink-0 w-[180px]">
               <MovieCard
+                type="movies"
                 id={movie.id}
                 title={movie.title}
                 src={movie.posterPath}

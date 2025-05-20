@@ -25,7 +25,9 @@ const TrendingMoviesCarousel = ({ movies }: { movies: MovieResult[] }) => {
 
   return (
     <div className="flex flex-col gap-4 ms-[46px]">
-      <h2 className="text-2xl font-semibold text-white px-6">Trending Movies</h2>
+      <h2 className="text-2xl font-semibold text-white px-6">
+        Trending Movies
+      </h2>
 
       {/* Carousel Container */}
       <div className="relative">
@@ -47,6 +49,7 @@ const TrendingMoviesCarousel = ({ movies }: { movies: MovieResult[] }) => {
           {movies?.map((movie: MovieResult) => (
             <div key={movie.id} className="flex-shrink-0 w-[180px]">
               <MovieCard
+                type="movies"
                 id={movie.id}
                 title={movie.title}
                 src={movie.posterPath}

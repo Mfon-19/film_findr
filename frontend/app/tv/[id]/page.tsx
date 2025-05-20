@@ -34,6 +34,7 @@ export default async function ShowPage({ params }: { params: { id: string } }) {
 
   return (
     <main className="relative min-h-screen bg-[#00050d]">
+      <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-[#00050d] to-transparent z-10" />
       <section className="relative h-[70vh] w-full overflow-hidden">
         <Image
           src={show.backdropPath}
@@ -137,7 +138,7 @@ export default async function ShowPage({ params }: { params: { id: string } }) {
           </div>
         </div>
 
-        <SimilarShows currentShowId={show.id} />
+        {/* <SimilarShows currentShowId={show.id} /> */}
 
         <div className="pt-16">
           <Link

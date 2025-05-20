@@ -5,6 +5,7 @@ import { FaPlay, FaPlus } from "react-icons/fa";
 import Link from "next/link";
 
 interface Props {
+  type: string;
   src: string;
   title: string;
   rating: number;
@@ -15,6 +16,7 @@ interface Props {
 }
 
 export default function MovieCard({
+  type,
   src,
   title,
   rating,
@@ -38,7 +40,7 @@ export default function MovieCard({
           {title} {year && <span className="text-gray-400">({year})</span>}
         </h3>
         <div className="mt-1 flex items-center gap-1 text-xs text-yellow-400">
-          <span>{"2" || rating.toFixed(1)}</span>
+          <span>{rating.toFixed(1)}</span>
           <IoMdStar className="h-3.5 w-3.5 shrink-0 fill-current" />
         </div>
       </div>
@@ -56,7 +58,7 @@ export default function MovieCard({
         <div className="p-3 text-white">
           <h4 className="mb-1 truncate text-base font-semibold">{title}</h4>
           <div className="mb-2 flex items-center gap-1 text-sm text-yellow-400">
-            <span>{"3" || rating.toFixed(1) }</span>
+            <span>{rating.toFixed(1) }</span>
             <IoMdStar className="h-4 w-4 shrink-0 fill-current" />
             {year && (
               <span className="ml-2 text-xs text-gray-400">({year})</span>
@@ -81,7 +83,7 @@ export default function MovieCard({
   );
 
   if (id) {
-    return <Link href={`/movies/${id}`}>{content}</Link>;
+    return <Link href={`/${type}/${id}`}>{content}</Link>;
   }
 
   return content;

@@ -30,6 +30,7 @@ export default function SimilarMovies({
         {similarMovies.map((movie) => (
           <div key={movie.id} className="relative">
             <MovieCard
+              type="shows"
               id={movie.id}
               src={movie.imgSrc}
               title={movie.title}
