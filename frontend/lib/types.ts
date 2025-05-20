@@ -89,3 +89,16 @@ export interface Show {
   genres: string[];
   voteAverage: number;
 }
+
+export interface ShowDetails extends Show {
+  createdBy: CreatedBy[];
+  firstAirDate: string;
+  lastAirDate: string;
+  numberOfEpisodes: number;
+  numberOfSeasons: number;
+  status: string;
+}
+
+interface CreatedBy {
+  name: string;
+}

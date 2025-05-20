@@ -8,6 +8,7 @@ import {
   MovieResult,
   RegisterRequest,
   Show,
+  ShowDetails,
 } from "./types";
 import { getServerSession } from "next-auth";
 import { JWT } from "next-auth/jwt";
@@ -190,5 +191,28 @@ export async function getTopRatedShows() {
     return result;
   } catch (error) {
     console.error(`Failed to fetch top rated shows: ${error}`);
+  }
+}
+
+export async function getShowById(id: string) {
+  const session = await getServerSession(authOptions);
+  try {
+    const response = await fetch(`${API_URL}/tv/show-details`, {
+      method: "POST",
+      headers: {
+        authorization: `Bearer ${session?.accessToken?.toString()}`,
+        "content-type": "application/json",
+      },
+      next: { revalidate: 86_400 },
+      body: JSON.stringify({ id: id }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Error fetching show details");
+    }
+    const result: ShowDetails = await response.json();
+    return result;
+  } catch (error) {
+    console.error(`Failed to fetch movie by id: ${error}`);
   }
 }
