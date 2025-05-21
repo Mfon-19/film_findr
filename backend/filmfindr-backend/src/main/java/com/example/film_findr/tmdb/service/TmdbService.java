@@ -206,4 +206,29 @@ public class TmdbService {
                     );
                 });
     }
+
+    public Mono<List<MovieResult>> discoverMovies() {
+        return webClient.get()
+                .uri("/discover/movie?language=en-US&api_key={apiKey}", apiKey)
+                .retrieve()
+                .bodyToMono(DiscoverMovieResponse.class)
+                .map(DiscoverMovieResponse::results);
+    }
+
+    public Mono<List<MovieResultEnriched>> discoverMoviesWithNames() {
+        return Mono.zip(discoverMovies(), fetchImageConfig(), genreMap())
+                .map(tuple -> {
+                    var movie = tuple.getT1();
+                    var imgCfg = tuple.getT2();
+                    var genre = tuple.getT3();
+
+                    return movie.stream()
+                            .map(m -> new MovieResultEnriched(
+                                    m.id(), m.title(), m.overview(),
+                                    buildPosterUrl(m.posterPath(), imgCfg, "w500"), m.releaseDate(), m.voteAverage(),
+                                    m.genreIds().stream().map(genre::get)
+                                            .toList()
+                            )).toList();
+                });
+    }
 }
