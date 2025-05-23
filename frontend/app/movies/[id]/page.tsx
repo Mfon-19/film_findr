@@ -4,7 +4,7 @@ import { FaPlay, FaBookmark } from "react-icons/fa";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import SimilarMovies from "@/components/similar-movies";
-import { getMovieById } from "@/lib/actions";
+import { getMovieById, getSimilarMovies } from "@/lib/actions";
 
 async function getMovie(id: string) {
   return getMovieById(id);
@@ -17,6 +17,11 @@ export default async function MoviePage({
 }) {
   const id = await params.id;
   const movie = await getMovie(id);
+
+  const similarMovies = await getSimilarMovies(id).then((movies) =>
+    movies?.filter((_, index) => index < 4)
+  );
+  if (!similarMovies) throw new Error();
 
   if (!movie) {
     notFound();
@@ -85,69 +90,48 @@ export default async function MoviePage({
       </div>
 
       {/* Details section */}
-      <div className="container mx-auto px-8 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-          <div className="lg:col-span-2">
-            <h2 className="text-2xl font-semibold text-white mb-6">
-              About the Movie
-            </h2>
-            <p className="text-gray-300 mb-8">{movie.overview}</p>
+      <div className="container mx-auto px-8 py-12 space-y-10">
+        <section>
+          <h2 className="text-2xl font-semibold text-white mb-4">
+            About the Movie
+          </h2>
+          <p className="text-gray-300">{movie.overview}</p>
+        </section>
 
-            <div className="mb-8">
-              <h3 className="text-xl font-semibold text-white mb-4">Cast</h3>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-                  <div key={i} className="text-center">
-                    <div className="h-40 w-full bg-gray-800 rounded-md mb-2"></div>
-                    <h4 className="text-white font-medium">Actor Name</h4>
-                    <p className="text-gray-400 text-sm">Character</p>
-                  </div>
-                ))}
-              </div>
+        <section>
+          <h2 className="text-2xl font-semibold text-white mb-4">
+            Movie Details
+          </h2>
+          <dl className="grid grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-4 text-gray-300">
+            <div>
+              <dt className="font-medium text-gray-400">Release Date</dt>
+              <dd>
+                {new Date(movie.releaseDate).toLocaleDateString("en-US", {
+                  month: "long",
+                  day: "numeric",
+                  year: "numeric",
+                })}
+              </dd>
             </div>
-          </div>
-
-          <div>
-            <h2 className="text-2xl font-semibold text-white mb-6">
-              Movie Details
-            </h2>
-            <dl className="space-y-4 text-gray-300">
-              <div>
-                <dt className="font-medium text-gray-400">Release Date</dt>
-                <dd>
-                  {new Date(movie.releaseDate).toLocaleDateString("en-US", {
-                    month: "long",
-                    day: "numeric",
-                    year: "numeric",
-                  })}
-                </dd>
-              </div>
-              <div>
-                <dt className="font-medium text-gray-400">Director</dt>
-                <dd>Christopher Nolan</dd>
-              </div>
-              <div>
-                <dt className="font-medium text-gray-400">Runtime</dt>
-                <dd>
-                  {Math.floor(movie.runtime / 60)}h {movie.runtime % 60}m
-                </dd>
-              </div>
-              <div>
-                <dt className="font-medium text-gray-400">Genre</dt>
-                <dd>{movie.genres?.join(", ") || "Not specified"}</dd>
-              </div>
-              <div>
-                <dt className="font-medium text-gray-400">Original Language</dt>
-                <dd>{movie.language}</dd>
-              </div>
-            </dl>
-          </div>
-        </div>
+            <div>
+              <dt className="font-medium text-gray-400">Runtime</dt>
+              <dd>
+                {Math.floor(movie.runtime / 60)}h {movie.runtime % 60}m
+              </dd>
+            </div>
+            <div>
+              <dt className="font-medium text-gray-400">Genre</dt>
+              <dd>{movie.genres?.join(", ") || "Not specified"}</dd>
+            </div>
+            <div>
+              <dt className="font-medium text-gray-400">Original Language</dt>
+              <dd>{movie.language}</dd>
+            </div>
+          </dl>
+        </section>
 
         {/* Similar Movies section */}
-        <div className="mt-12">
-          {/* <SimilarMovies currentMovieId={movie.id} /> */}
-        </div>
+        {similarMovies && <SimilarMovies similarMovies={similarMovies} />}
       </div>
 
       {/* Back button */}

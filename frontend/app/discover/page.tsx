@@ -13,10 +13,13 @@ import {
 import React from "react";
 
 const Page = async () => {
-  const trendingMovies = await getTrendingMovies();
-  const topRatedMovies = await getTopRatedMovies();
-  const trendingShows = await getTrendingShows();
-  const topRatedShows = await getTopRatedShows();
+  const [trendingMovies, topRatedMovies, trendingShows, topRatedShows] =
+    await Promise.all([
+      await getTrendingMovies(),
+      await getTopRatedMovies(),
+      await getTrendingShows(),
+      await getTopRatedShows(),
+    ]);
 
   const heroMovies = trendingMovies
     ?.slice()
@@ -24,7 +27,13 @@ const Page = async () => {
     .slice(0, 5);
   const heroMoviesIds = heroMovies?.map((movie) => movie.id.toString());
 
-  if (!trendingMovies || !topRatedMovies || !heroMoviesIds || !trendingShows || !topRatedShows)
+  if (
+    !trendingMovies ||
+    !topRatedMovies ||
+    !heroMoviesIds ||
+    !trendingShows ||
+    !topRatedShows
+  )
     return null;
 
   const heroSectionMovies = await getMoviesById(heroMoviesIds);

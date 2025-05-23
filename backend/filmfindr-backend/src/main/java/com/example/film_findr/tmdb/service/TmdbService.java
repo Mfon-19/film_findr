@@ -43,6 +43,14 @@ public class TmdbService {
                 .map(TrendingMovieResponse::results);
     }
 
+    public Mono<List<MovieResult>> getSimilarMovies(String movieId) {
+        return webClient.get()
+                .uri("/movie/{movieId}/similar?api_key={apiKey}", movieId, apiKey)
+                .retrieve()
+                .bodyToMono(TrendingMovieResponse.class)
+                .map(TrendingMovieResponse::results);
+    }
+
     //@Cacheable("movieGenres")
     public Mono<Map<Integer, String>> genreMap() {
         return webClient.get()
@@ -70,6 +78,21 @@ public class TmdbService {
                 });
     }
 
+    public Mono<List<MovieResultEnriched>> similarMoviesWithNames(String movieId) {
+        return Mono.zip(getSimilarMovies(movieId), genreMap(), fetchImageConfig())
+                .map(tuple -> {
+                    var list = tuple.getT1();
+                    var id2nm = tuple.getT2();
+                    var imgCfg = tuple.getT3();
+                    return list.stream()
+                            .map(m -> new MovieResultEnriched(
+                                    m.id(), m.title(), m.overview(),
+                                    buildPosterUrl(m.posterPath(), imgCfg, "w500"), m.releaseDate(), m.voteAverage(),
+                                    m.genreIds().stream().map(id2nm::get)
+                                            .toList()
+                            )).toList();
+                });
+    }
     public Mono<List<MovieResultEnriched>> topRatedWithNames() {
         return Mono.zip(getTopRatedMovies(), genreMap(), fetchImageConfig())
                 .map(tuple -> {

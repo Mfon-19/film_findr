@@ -258,3 +258,28 @@ export async function getShows() {
     console.error(`Failed to fetch movies: ${error}`);
   }
 }
+
+export async function getSimilarMovies(id: string) {
+  const session = await getServerSession(authOptions);
+  try {
+    const response = await fetch(`${API_URL}/movies/similar`, {
+      method: "POST",
+      headers: {
+        authorization: `Bearer ${session?.accessToken?.toString()}`,
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ id: id }),
+      next: { revalidate: 86_400 },
+    });
+
+    if (!response.ok) {
+      console.error("Error message:", JSON.stringify(response));
+      throw new Error("Error fetching similar movies");
+    }
+
+    const result: MovieResult[] = await response.json();
+    return result;
+  } catch (error) {
+    console.error(`Failed to fetch movies: ${error}`);
+  }
+}

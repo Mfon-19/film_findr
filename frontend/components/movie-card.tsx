@@ -30,7 +30,7 @@ export default function MovieCard({
       {/* --- Visible Card Area (Scales on hover) --- */}
       <div className="overflow-hidden rounded-md shadow-md transition-all duration-300 ease-in-out group-hover:shadow-xl">
         <div className="relative" style={{ paddingBottom: "150%" }}>
-          <Image src={src} alt={alt} fill className="object-cover" />
+          <Image src={src} alt={alt || "poster"} fill className="object-cover" />
         </div>
       </div>
 
