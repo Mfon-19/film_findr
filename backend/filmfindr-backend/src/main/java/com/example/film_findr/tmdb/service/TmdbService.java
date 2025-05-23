@@ -51,6 +51,14 @@ public class TmdbService {
                 .map(TrendingMovieResponse::results);
     }
 
+    public Mono<List<TvResult>> getSimilarShows(String showId) {
+        return webClient.get()
+                .uri("/tv/{showId}/similar?api_key={apiKey}", showId, apiKey)
+                .retrieve()
+                .bodyToMono(TrendingTvResponse.class)
+                .map(TrendingTvResponse::results);
+    }
+
     //@Cacheable("movieGenres")
     public Mono<Map<Integer, String>> genreMap() {
         return webClient.get()
@@ -208,6 +216,23 @@ public class TmdbService {
                 });
     }
 
+    public Mono<List<TvResultEnriched>> similarShowsWithnames(String id) {
+        return Mono.zip(getSimilarShows(id), genreMap(), fetchImageConfig())
+                .map(tuple -> {
+                    var show = tuple.getT1();
+                    var genre = tuple.getT2();
+                    var imgCfg = tuple.getT3();
+
+                    return show.stream()
+                            .map(m -> new TvResultEnriched(
+                                    m.id(), m.name(), m.adult(),
+                                    m.overview(), m.originalLanguage(),
+                                    buildPosterUrl(m.posterPath(), imgCfg, "w500"),
+                                    buildPosterUrl(m.backdropPath(), imgCfg, "w1280"),
+                                    m.genreIds().stream().map(genre::get).toList(), m.voteAverage()
+                            )).toList();
+                });
+    }
     public Mono<TvDetails> getShowById(String showId) {
         return webClient.get()
                 .uri("https://api.themoviedb.org/3/tv/{showId}?language=en-US&api_key={apiKey}", showId, apiKey)

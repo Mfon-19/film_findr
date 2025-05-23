@@ -3,8 +3,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { IoMdStar } from "react-icons/io";
 import { FaPlay, FaBookmark } from "react-icons/fa";
-import { getShowById } from "@/lib/actions";
+import { getShowById, getSimilarShows } from "@/lib/actions";
 import { ShowDetails } from "@/lib/types";
+import SimilarShows from "@/components/similar-shows";
 
 async function getShow(id: string): Promise<ShowDetails> {
   const show = await getShowById(id);
@@ -15,16 +16,23 @@ async function getShow(id: string): Promise<ShowDetails> {
 export async function generateMetadata({ params }: { params: { id: string } }) {
   const id = params.id;
   const show = await getShow(id);
+
   if (!show) return { title: "Show Not Found" };
-  return { 
-    title: `${show.name} | Film Findr`, 
-    description: show.overview 
+  return {
+    title: `${show.name} | Film Findr`,
+    description: show.overview,
   };
 }
 
 export default async function ShowPage({ params }: { params: { id: string } }) {
   const id = await params.id;
-  const show = await getShow(id)
+  const show = await getShow(id);
+
+  const similarShows = await getSimilarShows(id).then((shows) =>
+    shows?.filter((_, index) => index < 4)
+  );
+  if (!similarShows) throw new Error();
+
   if (!show) notFound();
 
   const creators =
@@ -118,26 +126,7 @@ export default async function ShowPage({ params }: { params: { id: string } }) {
             <p className="text-gray-200">{show.numberOfEpisodes}</p>
           </div>
         </div>
-
-        <div className="mb-12">
-          <h2 className="mb-6 text-2xl font-semibold text-white">Season 1</h2>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            {(show.episodes || Array.from({ length: 8 })).map(
-              (_: any, idx: number) => (
-                <div
-                  key={idx}
-                  className="space-y-2 rounded-md bg-[#0f1622] p-4">
-                  <div className="h-40 w-full rounded-md bg-gray-800" />
-                  <p className="font-medium text-white">Episode {idx + 1}</p>
-                  <p className="text-sm text-gray-400">Episode Title</p>
-                  <p className="text-xs text-gray-500">45m</p>
-                </div>
-              )
-            )}
-          </div>
-        </div>
-
-        {/* <SimilarShows currentShowId={show.id} /> */}
+        {similarShows && <SimilarShows similarShows={similarShows} />}
 
         <div className="pt-16">
           <Link

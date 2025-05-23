@@ -1,20 +1,12 @@
-import { movieData as showData } from "@/lib/movie-data";
 import MovieCard from "./movie-card";
 import Link from "next/link";
-
-interface SimilarMoviesProps {
-  currentShowId: number;
-  limit?: number;
-}
+import { Show } from "@/lib/types";
 
 export default function SimilarShows({
-  currentShowId,
-  limit = 4,
-}: SimilarMoviesProps) {
-  const similarShows = showData
-    .filter((show) => show.id !== currentShowId)
-    .slice(0, limit);
-
+  similarShows,
+}: {
+  similarShows: Show[];
+}) {
   return (
     <div className="py-10">
       <div className="flex items-center justify-between mb-6">
@@ -32,11 +24,11 @@ export default function SimilarShows({
             <MovieCard
               type="tv"
               id={show.id}
-              src={show.imgSrc}
-              title={show.title}
-              rating={show.rating}
+              src={show.posterPath}
+              title={show.name}
+              rating={show.voteAverage}
               description={show.overview}
-              alt={show.alt}
+              alt={show.alt || "show poster"}
             />
           </div>
         ))}

@@ -62,6 +62,7 @@ public class MovieController {
                         new ResponseStatusException(
                                 HttpStatus.UNAUTHORIZED, "Token is expired or invalid", e)));
     }
+
     @GetMapping("/discover")
     public Mono<ResponseEntity<List<MovieResultEnriched>>> discover(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {

@@ -65,6 +65,26 @@ public class TvController {
                         new ResponseStatusException(HttpStatus.BAD_GATEWAY, "TMDB request failed: " + ex.getMessage(), ex));
     }
 
+    @PostMapping("/similar")
+    public Mono<ResponseEntity<List<TvResultEnriched>>> similar(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader, @RequestBody Map<String, String> request) {
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return Mono.error(new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Missing Bearer access token"));
+        }
+
+        String id = request.get("id");
+        String token = authHeader.substring("Bearer ".length()).trim();
+
+        return Mono.fromCallable(() -> jwt.parseAccessToken(token))
+                .then(tmdb.similarShowsWithnames(id))
+                .map(ResponseEntity::ok)
+                .onErrorResume(e -> Mono.error(
+                        new ResponseStatusException(
+                                HttpStatus.UNAUTHORIZED, "Token is expired or invalid", e)));
+    }
+
     @PostMapping("/show-details")
     public Mono<ResponseEntity<TvDetailsEnriched>> showDetails(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader, @RequestBody Map<String, String> req
