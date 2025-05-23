@@ -216,3 +216,45 @@ export async function getShowById(id: string) {
     console.error(`Failed to fetch movie by id: ${error}`);
   }
 }
+
+export async function getMovies() {
+  const session = await getServerSession(authOptions);
+  try {
+    const response = await fetch(`${API_URL}/movies/discover`, {
+      headers: {
+        authorization: `Bearer ${session?.accessToken?.toString()}`,
+      },
+      next: { revalidate: 86_400 },
+    });
+
+    if (!response.ok) {
+      throw new Error("Error fetching movies");
+    }
+
+    const result: MovieResult[] = await response.json();
+    return result;
+  } catch (error) {
+    console.error(`Failed to fetch movies: ${error}`);
+  }
+}
+
+export async function getShows() {
+  const session = await getServerSession(authOptions);
+  try {
+    const response = await fetch(`${API_URL}/tv/discover`, {
+      headers: {
+        authorization: `Bearer ${session?.accessToken?.toString()}`,
+      },
+      next: { revalidate: 86_400 },
+    });
+
+    if (!response.ok) {
+      throw new Error("Error fetching shows");
+    }
+
+    const result: Show[] = await response.json();
+    return result;
+  } catch (error) {
+    console.error(`Failed to fetch movies: ${error}`);
+  }
+}

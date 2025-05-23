@@ -3,7 +3,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { IoMdStar } from "react-icons/io";
 import { FaPlay, FaBookmark } from "react-icons/fa";
-import SimilarShows from "@/components/similar-shows";
 import { getShowById } from "@/lib/actions";
 import { ShowDetails } from "@/lib/types";
 

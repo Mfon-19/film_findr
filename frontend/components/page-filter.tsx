@@ -60,17 +60,7 @@ const allGenres: Genre[] = [
   "Western",
 ];
 
-export default function PageFilter({
-  onApply,
-}: {
-  onApply: (filters: {
-    sortBy: string;
-    genres: Genre[];
-    rating: number;
-    year: number;
-    language: string;
-  }) => void;
-}) {
+export default function PageFilter() {
   const [sortBy, setSortBy] = useState("popularity.desc");
   const [genres, setGenres] = useState<Genre[]>([]);
   const [rating, setRating] = useState(0); // 0‒10
@@ -273,8 +263,7 @@ export default function PageFilter({
 
           {/* ---------- Apply button ---------- */}
           <Button
-            className="w-full bg-white text-[#0B304F] hover:bg-white/90"
-            onClick={() => onApply({ sortBy, genres, rating, year, language })}>
+            className="w-full bg-white text-[#0B304F] hover:bg-white/90">
             Apply Filters
           </Button>
         </CardContent>

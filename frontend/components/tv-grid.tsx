@@ -1,11 +1,11 @@
 "use client";
 
-import { Movie } from "@/lib/types";
+import { Show } from "@/lib/types";
 import MovieCard from "./movie-card";
 import EntityGrid from "./entity-grid";
 
 interface TVGridProps {
-  shows: Movie[];
+  shows: Show[];
 }
 
 export default function TVGrid({ shows }: TVGridProps) {
@@ -17,11 +17,11 @@ export default function TVGrid({ shows }: TVGridProps) {
           <MovieCard
             type="tv"
             id={show.id}
-            src={show.imgSrc}
-            title={show.title}
-            rating={show.rating}
+            src={show.posterPath}
+            title={show.name}
+            rating={show.voteAverage}
             description={show.overview}
-            alt={show.alt}
+            alt={show.alt || "show"}
           />
         </div>
       )}

@@ -231,4 +231,30 @@ public class TmdbService {
                             )).toList();
                 });
     }
+
+    public Mono<List<TvResult>> discoverShows() {
+        return webClient.get()
+                .uri("/discover/tv?language=en-US&api_key={apiKey}", apiKey)
+                .retrieve()
+                .bodyToMono(TrendingTvResponse.class)
+                .map(TrendingTvResponse::results);
+    }
+
+    public Mono<List<TvResultEnriched>> discoverShowsWithNames() {
+        return Mono.zip(discoverShows(), fetchImageConfig(), genreMap())
+                .map(tuple -> {
+                    var show = tuple.getT1();
+                    var imgCfg = tuple.getT2();
+                    var genre = tuple.getT3();
+
+                    return show.stream()
+                            .map(s -> new TvResultEnriched(
+                                    s.id(), s.name(), s.adult(), s.overview(), s.originalLanguage(),
+                                    buildPosterUrl(s.posterPath(), imgCfg, "w500"),
+                                    buildPosterUrl(s.backdropPath(), imgCfg, "w1280"),
+                                    s.genreIds().stream().map(genre::get)
+                                            .toList(), s.voteAverage()
+                            )).toList();
+                });
+    }
 }

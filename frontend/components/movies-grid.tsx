@@ -1,11 +1,11 @@
 "use client";
 
-import { Movie } from "@/lib/types";
+import { MovieResult } from "@/lib/types";
 import MovieCard from "./movie-card";
 import EntityGrid from "./entity-grid";
 
 interface MoviesGridProps {
-  movies: Movie[];
+  movies: MovieResult[];
 }
 
 export default function MoviesGrid({ movies }: MoviesGridProps) {
@@ -17,11 +17,11 @@ export default function MoviesGrid({ movies }: MoviesGridProps) {
           <MovieCard
             type="movies"
             id={movie.id}
-            src={movie.imgSrc}
+            src={movie.posterPath}
             title={movie.title}
-            rating={movie.rating}
+            rating={movie.voteAverage}
             description={movie.overview}
-            alt={movie.alt}
+            alt={movie.alt || "movie"}
           />
         </div>
       )}

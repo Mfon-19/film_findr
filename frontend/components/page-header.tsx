@@ -58,11 +58,7 @@ export default function PageHeader({
       {/* Title + optional subtitle */}
       <div className={subtitle ? "mt-4" : "mt-2"}>
         <h1
-          className={
-            title === "Movies"
-              ? "text-4xl font-extrabold text-white"
-              : "text-2xl font-semibold text-white"
-          }
+          className="text-4xl font-extrabold text-white"
         >
           {title}
         </h1>
