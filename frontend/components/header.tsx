@@ -1,11 +1,15 @@
+"use client";
+
 import Link from "next/link";
 import Logo from "./logo";
+import { useState } from "react";
 import {
   HomeIcon,
   FilmIcon,
   TvIcon,
   MagnifyingGlassIcon,
   UserCircleIcon,
+  XMarkIcon,
 } from "@heroicons/react/24/outline";
 
 const pill = "rounded-full backdrop-blur-md ring-1 ring-white/10";
@@ -13,6 +17,25 @@ const navItem = "flex flex-col items-center gap-1 text-sm font-medium";
 const iconSize = "h-6 w-6";
 
 export default function Header() {
+  const [isSearchExpanded, setIsSearchExpanded] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      // Handle search logic here - could navigate to search results
+      console.log("Searching for:", searchQuery);
+      // Example: router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
+    }
+  };
+
+  const handleSearchToggle = () => {
+    setIsSearchExpanded(!isSearchExpanded);
+    if (isSearchExpanded) {
+      setSearchQuery("");
+    }
+  };
+
   return (
     <>
       <header className="hidden lg:flex items-center justify-between px-8 py-4 pointer-events-none">
@@ -63,11 +86,38 @@ export default function Header() {
 
         {/* search + avatar */}
         <div className="pointer-events-auto flex items-center gap-6">
-          <button
-            className={`flex items-center gap-2 px-5 py-3 ${pill} hover:bg-white/10`}>
-            <MagnifyingGlassIcon className={iconSize} />
-            <span className="text-base font-medium text-gray-200">Search</span>
-          </button>
+          <div className={`relative ${pill} hover:bg-white/10 transition-all duration-300 ${
+            isSearchExpanded ? 'w-80' : 'w-auto'
+          }`}>
+            {isSearchExpanded ? (
+              <form onSubmit={handleSearchSubmit} className="flex items-center gap-2 px-5 py-3">
+                <MagnifyingGlassIcon className={iconSize} />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search movies, TV shows..."
+                  className="flex-1 bg-transparent text-gray-200 placeholder-gray-400 text-base font-medium outline-none"
+                  autoFocus
+                />
+                <button
+                  type="button"
+                  onClick={handleSearchToggle}
+                  className="text-gray-400 hover:text-gray-200 transition-colors"
+                >
+                  <XMarkIcon className="h-5 w-5" />
+                </button>
+              </form>
+            ) : (
+              <button
+                onClick={handleSearchToggle}
+                className="flex items-center gap-2 px-5 py-3 w-full"
+              >
+                <MagnifyingGlassIcon className={iconSize} />
+                <span className="text-base font-medium text-gray-200">Search</span>
+              </button>
+            )}
+          </div>
           <button
             className={`flex h-12 w-12 items-center justify-center ${pill} hover:bg-white/10`}>
             <UserCircleIcon className="h-8 w-8 text-gray-200" />
