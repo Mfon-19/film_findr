@@ -1,0 +1,324 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import {
+  MagnifyingGlassIcon,
+  FunnelIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
+import { MovieResult, Show } from "@/lib/types";
+import MovieCard from "@/components/movie-card";
+
+interface SearchResults {
+  movies: MovieResult[];
+  shows: Show[];
+}
+
+interface SearchPageComponentProps {
+  initialQuery?: string;
+}
+
+export default function SearchPageComponent({ 
+  initialQuery = "" 
+}: SearchPageComponentProps) {
+  const [searchQuery, setSearchQuery] = useState(initialQuery);
+  const [results, setResults] = useState<SearchResults>({ movies: [], shows: [] });
+  const [isLoading, setIsLoading] = useState(false);
+  const [activeFilter, setActiveFilter] = useState<"all" | "movies" | "shows">("all");
+  const [showFilters, setShowFilters] = useState(false);
+
+  // Mock data with proper types
+  const mockSearchResults: SearchResults = {
+    movies: [
+      {
+        id: 1,
+        title: "The Dark Knight",
+        alt: "The Dark Knight movie poster",
+        imgSrc: "/placeholder-movie.jpg",
+        overview: "When the menace known as the Joker wreaks havoc on Gotham City...",
+        posterPath: "/placeholder-movie.jpg",
+        releaseDate: "2008-07-18",
+        voteAverage: 9.0,
+        genreIds: ["28", "80", "18"]
+      },
+      {
+        id: 2,
+        title: "Inception",
+        alt: "Inception movie poster",
+        imgSrc: "/placeholder-movie2.jpg",
+        overview: "A thief who steals corporate secrets through dream-sharing technology...",
+        posterPath: "/placeholder-movie2.jpg",
+        releaseDate: "2010-07-16",
+        voteAverage: 8.8,
+        genreIds: ["28", "878", "53"]
+      },
+      {
+        id: 3,
+        title: "Interstellar",
+        alt: "Interstellar movie poster",
+        imgSrc: "/placeholder-movie3.jpg",
+        overview: "A team of explorers travel through a wormhole in space...",
+        posterPath: "/placeholder-movie3.jpg",
+        releaseDate: "2014-11-07",
+        voteAverage: 8.6,
+        genreIds: ["18", "878"]
+      },
+    ],
+    shows: [
+      {
+        id: 4,
+        name: "Breaking Bad",
+        adult: false,
+        overview: "A high school chemistry teacher turned methamphetamine manufacturer...",
+        originalLanguage: "en",
+        posterPath: "/placeholder-show.jpg",
+        backdropPath: "/placeholder-show-backdrop.jpg",
+        alt: "Breaking Bad TV show poster",
+        genres: ["Crime", "Drama", "Thriller"],
+        voteAverage: 9.5
+      },
+      {
+        id: 5,
+        name: "Stranger Things",
+        adult: false,
+        overview: "When a young boy vanishes, a small town uncovers a mystery involving secret experiments...",
+        originalLanguage: "en",
+        posterPath: "/placeholder-show2.jpg",
+        backdropPath: "/placeholder-show2-backdrop.jpg",
+        alt: "Stranger Things TV show poster",
+        genres: ["Drama", "Fantasy", "Horror"],
+        voteAverage: 8.7
+      },
+    ],
+  };
+
+  // Simulate search API call
+  const performSearch = async (query: string): Promise<void> => {
+    if (!query.trim()) {
+      setResults({ movies: [], shows: [] });
+      return;
+    }
+
+    setIsLoading(true);
+    // Simulate API delay
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
+    // Filter mock results based on query
+    const filteredResults: SearchResults = {
+      movies: mockSearchResults.movies.filter((movie) =>
+        movie.title.toLowerCase().includes(query.toLowerCase())
+      ),
+      shows: mockSearchResults.shows.filter((show) =>
+        show.name.toLowerCase().includes(query.toLowerCase())
+      ),
+    };
+
+    setResults(filteredResults);
+    setIsLoading(false);
+  };
+
+  // Initialize search with initialQuery
+  useEffect(() => {
+    if (initialQuery) {
+      performSearch(initialQuery);
+    }
+  }, [initialQuery]);
+
+  useEffect(() => {
+    const debounceTimer = setTimeout(() => {
+      performSearch(searchQuery);
+    }, 300);
+
+    return () => clearTimeout(debounceTimer);
+  }, [searchQuery]);
+
+  const filteredResults = (): SearchResults => {
+    switch (activeFilter) {
+      case "movies":
+        return { movies: results.movies, shows: [] };
+      case "shows":
+        return { movies: [], shows: results.shows };
+      default:
+        return results;
+    }
+  };
+
+  const totalResults = results.movies.length + results.shows.length;
+  const filtered = filteredResults();
+
+  // Helper function to get movie year from releaseDate
+  const getMovieYear = (releaseDate: string): number | undefined => {
+    if (!releaseDate) return undefined;
+    return new Date(releaseDate).getFullYear();
+  };
+
+  return (
+    <div className="min-h-screen bg-[#00050d] pt-24 pb-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Search Header */}
+        <div className="mb-8">
+          <div className="relative max-w-2xl mx-auto">
+            <div className="relative">
+              <MagnifyingGlassIcon className="absolute left-4 top-1/2 transform -translate-y-1/2 h-6 w-6 text-gray-400" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search for movies, TV shows..."
+                className="w-full pl-12 pr-4 py-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white placeholder-gray-400 text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                autoFocus
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white">
+                  <XMarkIcon className="h-6 w-6" />
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Results Summary & Filters */}
+          {searchQuery && (
+            <div className="mt-6 flex items-center justify-between">
+              <div className="text-gray-300">
+                {isLoading ? (
+                  <span>Searching...</span>
+                ) : (
+                  <span>
+                    {totalResults > 0
+                      ? `${totalResults} result${
+                          totalResults !== 1 ? "s" : ""
+                        } for "${searchQuery}"`
+                      : `No results found for "${searchQuery}"`}
+                  </span>
+                )}
+              </div>
+
+              {totalResults > 0 && (
+                <div className="flex items-center gap-4">
+                  <button
+                    onClick={() => setShowFilters(!showFilters)}
+                    className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-gray-300 hover:text-white hover:bg-white/20 transition-all">
+                    <FunnelIcon className="h-4 w-4" />
+                    Filters
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Filter Pills */}
+          {showFilters && totalResults > 0 && (
+            <div className="mt-4 flex gap-3">
+              {[
+                { key: "all" as const, label: "All", count: totalResults },
+                {
+                  key: "movies" as const,
+                  label: "Movies",
+                  count: results.movies.length,
+                },
+                {
+                  key: "shows" as const,
+                  label: "TV Shows",
+                  count: results.shows.length,
+                },
+              ].map((filter) => (
+                <button
+                  key={filter.key}
+                  onClick={() => setActiveFilter(filter.key)}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                    activeFilter === filter.key
+                      ? "bg-blue-600 text-white"
+                      : "bg-white/10 text-gray-300 hover:bg-white/20 hover:text-white"
+                  }`}>
+                  {filter.label} ({filter.count})
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Loading State */}
+        {isLoading && (
+          <div className="flex justify-center py-12">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+          </div>
+        )}
+
+        {/* Search Results */}
+        {!isLoading && searchQuery && (
+          <>
+            {/* Movies Section */}
+            {filtered.movies.length > 0 && (
+              <div className="mb-12">
+                <h2 className="text-2xl font-bold text-white mb-6">Movies</h2>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+                  {filtered.movies.map((movie) => (
+                    <MovieCard
+                      key={movie.id}
+                      type="movies"
+                      id={movie.id}
+                      src={movie.posterPath}
+                      title={movie.title}
+                      rating={movie.voteAverage}
+                      description={movie.overview}
+                      year={getMovieYear(movie.releaseDate)}
+                      alt={movie.alt}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* TV Shows Section */}
+            {filtered.shows.length > 0 && (
+              <div className="mb-12">
+                <h2 className="text-2xl font-bold text-white mb-6">TV Shows</h2>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+                  {filtered.shows.map((show) => (
+                    <MovieCard
+                      key={show.id}
+                      type="tv"
+                      id={show.id}
+                      src={show.posterPath}
+                      title={show.name}
+                      rating={show.voteAverage}
+                      description={show.overview}
+                      alt={show.alt}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* No Results */}
+            {totalResults === 0 && (
+              <div className="text-center py-12">
+                <div className="text-gray-400 text-lg mb-2">
+                  No results found
+                </div>
+                <div className="text-gray-500 text-sm">
+                  Try adjusting your search terms or browse our collections
+                </div>
+              </div>
+            )}
+          </>
+        )}
+
+        {/* Empty State */}
+        {!searchQuery && (
+          <div className="text-center py-20">
+            <MagnifyingGlassIcon className="h-16 w-16 text-gray-600 mx-auto mb-4" />
+            <h2 className="text-xl font-medium text-gray-400 mb-2">
+              Search for movies and TV shows
+            </h2>
+            <p className="text-gray-500">
+              Discover your next favorite from thousands of titles
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

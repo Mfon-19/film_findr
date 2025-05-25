@@ -1,8 +1,9 @@
-"use client";
+"use client"
 
 import Link from "next/link";
 import Logo from "./logo";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   HomeIcon,
   FilmIcon,
@@ -19,13 +20,16 @@ const iconSize = "h-6 w-6";
 export default function Header() {
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const router = useRouter();
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      // Handle search logic here - could navigate to search results
-      console.log("Searching for:", searchQuery);
-      // Example: router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
+      // Navigate to search results page
+      router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
+      // Reset search bar state
+      setIsSearchExpanded(false);
+      setSearchQuery("");
     }
   };
 
