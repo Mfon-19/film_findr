@@ -121,4 +121,24 @@ public class MovieController {
                 .onErrorMap(DownstreamServiceException.class, ex ->
                         new ResponseStatusException(HttpStatus.BAD_GATEWAY, "TMDB request failed: " + ex.getMessage(), ex));
     }
+
+    @PostMapping("/search")
+    public Mono<ResponseEntity<List<MovieResultEnriched>>> search(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader, @RequestBody Map<String, String> req
+    ){
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return Mono.error(new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Missing Bearer access token"));
+        }
+        String query = req.get("query");
+        String token = authHeader.substring("Bearer ".length()).trim();
+
+        return Mono.fromCallable(() -> jwt.parseAccessToken(token))
+                .onErrorMap(JwtException.class,
+                        ex -> new JwtException("Token invalid or expired", ex))
+                .flatMap(ok -> tmdb.searchMoviesWithNames(query))
+                .map(ResponseEntity::ok)
+                .onErrorMap(DownstreamServiceException.class, ex ->
+                        new ResponseStatusException(HttpStatus.BAD_GATEWAY, "TMDB request failed: " + ex.getMessage(), ex));
+    }
 }

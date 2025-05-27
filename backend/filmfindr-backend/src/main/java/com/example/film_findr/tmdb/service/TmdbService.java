@@ -305,4 +305,29 @@ public class TmdbService {
                             )).toList();
                 });
     }
+
+    public Mono<List<MovieResult>> searchMovies(String query){
+        return webClient.get()
+                .uri("/search/movie?query={query}&include_adult=false&language=en-US&page=1&api_key={apiKey}", query, apiKey)
+                .retrieve()
+                .bodyToMono(TrendingMovieResponse.class)
+                .map(TrendingMovieResponse::results);
+    }
+
+    public Mono<List<MovieResultEnriched>> searchMoviesWithNames(String query) {
+        return Mono.zip(searchMovies(query), fetchImageConfig(), genreMap())
+                .map(tuple -> {
+                    var movie = tuple.getT1();
+                    var imgCfg = tuple.getT2();
+                    var genre = tuple.getT3();
+
+                    return movie.stream()
+                            .map(m -> new MovieResultEnriched(
+                                    m.id(), m.title(), m.overview(),
+                                    buildPosterUrl(m.posterPath(), imgCfg, "w500"), m.releaseDate(), m.voteAverage(),
+                                    m.genreIds().stream().map(genre::get)
+                                            .toList()
+                            )).toList();
+                });
+    }
 }

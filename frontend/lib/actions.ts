@@ -303,6 +303,30 @@ export async function getSimilarShows(id: string) {
     const result: Show[] = await response.json();
     return result;
   } catch (error) {
+    console.error(`Failed to fetch similar shows: ${error}`);
+  }
+}
+
+export async function searchMovies(query: string) {
+  const session = await getServerSession(authOptions);
+  try {
+    const response = await fetch(`${API_URL}/movies/search`, {
+      method: "POST",
+      headers: {
+        authorization: `Bearer ${session?.accessToken?.toString()}`,
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ "query": query }),
+      next: { revalidate: 86_400 },
+    });
+
+    if (!response.ok) {
+      throw new Error("Error searching movies");
+    }
+
+    const result: MovieResult[] = await response.json();
+    return result;
+  } catch (error) {
     console.error(`Failed to fetch movies: ${error}`);
   }
 }
