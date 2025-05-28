@@ -330,4 +330,30 @@ public class TmdbService {
                             )).toList();
                 });
     }
+
+    public Mono<List<TvResult>> searchShows(String query){
+        return webClient.get()
+                .uri("/search/tv?query={query}&include_adult=false&language=en-US&page=1&api_key={apiKey}", query, apiKey)
+                .retrieve()
+                .bodyToMono(TrendingTvResponse.class)
+                .map(TrendingTvResponse::results);
+    }
+
+    public Mono<List<TvResultEnriched>> searchShowsWithNames(String query) {
+        return Mono.zip(searchShows(query), genreMap(), fetchImageConfig())
+                .map(tuple -> {
+                    var show = tuple.getT1();
+                    var genre = tuple.getT2();
+                    var imgCfg = tuple.getT3();
+
+                    return show.stream()
+                            .map(m -> new TvResultEnriched(
+                                    m.id(), m.name(), m.adult(),
+                                    m.overview(), m.originalLanguage(),
+                                    buildPosterUrl(m.posterPath(), imgCfg, "w500"),
+                                    buildPosterUrl(m.backdropPath(), imgCfg, "w1280"),
+                                    m.genreIds().stream().map(genre::get).toList(), m.voteAverage()
+                            )).toList();
+                });
+    }
 }

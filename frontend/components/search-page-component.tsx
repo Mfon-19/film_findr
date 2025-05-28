@@ -8,6 +8,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { MovieResult, Show } from "@/lib/types";
 import MovieCard from "@/components/movie-card";
+import { searchMovies, searchShows } from "@/lib/actions";
 
 interface SearchResults {
   movies: MovieResult[];
@@ -18,79 +19,20 @@ interface SearchPageComponentProps {
   initialQuery?: string;
 }
 
-export default function SearchPageComponent({ 
-  initialQuery = "" 
+export default function SearchPageComponent({
+  initialQuery = "",
 }: SearchPageComponentProps) {
+  console.log("Query: ", initialQuery)
   const [searchQuery, setSearchQuery] = useState(initialQuery);
-  const [results, setResults] = useState<SearchResults>({ movies: [], shows: [] });
+  const [results, setResults] = useState<SearchResults>({
+    movies: [],
+    shows: [],
+  });
   const [isLoading, setIsLoading] = useState(false);
-  const [activeFilter, setActiveFilter] = useState<"all" | "movies" | "shows">("all");
+  const [activeFilter, setActiveFilter] = useState<"all" | "movies" | "shows">(
+    "all"
+  );
   const [showFilters, setShowFilters] = useState(false);
-
-  // Mock data with proper types
-  const mockSearchResults: SearchResults = {
-    movies: [
-      {
-        id: 1,
-        title: "The Dark Knight",
-        alt: "The Dark Knight movie poster",
-        imgSrc: "/placeholder-movie.jpg",
-        overview: "When the menace known as the Joker wreaks havoc on Gotham City...",
-        posterPath: "/placeholder-movie.jpg",
-        releaseDate: "2008-07-18",
-        voteAverage: 9.0,
-        genreIds: ["28", "80", "18"]
-      },
-      {
-        id: 2,
-        title: "Inception",
-        alt: "Inception movie poster",
-        imgSrc: "/placeholder-movie2.jpg",
-        overview: "A thief who steals corporate secrets through dream-sharing technology...",
-        posterPath: "/placeholder-movie2.jpg",
-        releaseDate: "2010-07-16",
-        voteAverage: 8.8,
-        genreIds: ["28", "878", "53"]
-      },
-      {
-        id: 3,
-        title: "Interstellar",
-        alt: "Interstellar movie poster",
-        imgSrc: "/placeholder-movie3.jpg",
-        overview: "A team of explorers travel through a wormhole in space...",
-        posterPath: "/placeholder-movie3.jpg",
-        releaseDate: "2014-11-07",
-        voteAverage: 8.6,
-        genreIds: ["18", "878"]
-      },
-    ],
-    shows: [
-      {
-        id: 4,
-        name: "Breaking Bad",
-        adult: false,
-        overview: "A high school chemistry teacher turned methamphetamine manufacturer...",
-        originalLanguage: "en",
-        posterPath: "/placeholder-show.jpg",
-        backdropPath: "/placeholder-show-backdrop.jpg",
-        alt: "Breaking Bad TV show poster",
-        genres: ["Crime", "Drama", "Thriller"],
-        voteAverage: 9.5
-      },
-      {
-        id: 5,
-        name: "Stranger Things",
-        adult: false,
-        overview: "When a young boy vanishes, a small town uncovers a mystery involving secret experiments...",
-        originalLanguage: "en",
-        posterPath: "/placeholder-show2.jpg",
-        backdropPath: "/placeholder-show2-backdrop.jpg",
-        alt: "Stranger Things TV show poster",
-        genres: ["Drama", "Fantasy", "Horror"],
-        voteAverage: 8.7
-      },
-    ],
-  };
 
   // Simulate search API call
   const performSearch = async (query: string): Promise<void> => {
@@ -100,17 +42,18 @@ export default function SearchPageComponent({
     }
 
     setIsLoading(true);
-    // Simulate API delay
-    await new Promise((resolve) => setTimeout(resolve, 500));
+
+    const [movies, shows] = await Promise.all([
+      await searchMovies(query),
+      await searchShows(query),
+    ]);
+
+    if (!movies || !shows) throw new Error();
 
     // Filter mock results based on query
     const filteredResults: SearchResults = {
-      movies: mockSearchResults.movies.filter((movie) =>
-        movie.title.toLowerCase().includes(query.toLowerCase())
-      ),
-      shows: mockSearchResults.shows.filter((show) =>
-        show.name.toLowerCase().includes(query.toLowerCase())
-      ),
+      movies,
+      shows,
     };
 
     setResults(filteredResults);
