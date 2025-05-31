@@ -8,14 +8,32 @@ import TvPageHeader from "@/components/tv-page-header";
 import { getShows } from "@/lib/actions";
 import { cookies } from "next/headers";
 
-export default async function TVPage() {
-  const filteredShows = await getShows()
-  if (!filteredShows) throw Error()
+interface TVPageProps {
+  searchParams: {
+    sortBy?: string;
+    genres?: string;
+    rating?: string;
+    year?: string;
+    language?: string;
+  };
+}
+
+export default async function TVPage({ searchParams }: TVPageProps) {
+  const filters = {
+    sortBy: searchParams.sortBy || "popularity.desc",
+    genres: searchParams.genres ? searchParams.genres.split(",") : [],
+    rating: searchParams.rating ? parseFloat(searchParams.rating) : 0,
+    year: searchParams.year ? parseInt(searchParams.year) : 2025,
+    language: searchParams.language || "en"
+  };
+
+  const filteredShows = await getShows(filters);
+  if (!filteredShows) throw Error();
 
   return (
     <main className="flex gap-8 px-4 pt-8 md:px-12">
       {/* left column */}
-      <PageFilter />
+      <PageFilter type="tv" />
 
       {/* right column */}
       <section className="flex-1">

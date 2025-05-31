@@ -8,14 +8,32 @@ import MoviesGrid from "@/components/movies-grid";
 import { Movie } from "@/lib/types";
 import { getMovies } from "@/lib/actions";
 
-export default async function MoviesPage() {
-  const filteredMovies = await getMovies();
+interface MoviesPageProps {
+  searchParams: {
+    sortBy?: string;
+    genres?: string;
+    rating?: string;
+    year?: string;
+    language?: string;
+  };
+}
+
+export default async function MoviesPage({ searchParams }: MoviesPageProps) {
+  const filters = {
+    sortBy: searchParams.sortBy || "popularity.desc",
+    genres: searchParams.genres ? searchParams.genres.split(",") : [],
+    rating: searchParams.rating ? parseFloat(searchParams.rating) : 0,
+    year: searchParams.year ? parseInt(searchParams.year) : 2025,
+    language: searchParams.language || "en"
+  };
+
+  const filteredMovies = await getMovies(filters);
   if (!filteredMovies) throw Error();
 
   return (
     <main className="flex gap-8 px-4 pt-8 md:px-12">
       {/* left column */}
-      <PageFilter />
+      <PageFilter type="movies"/>
 
       {/* right column */}
       <section className="flex-1">
