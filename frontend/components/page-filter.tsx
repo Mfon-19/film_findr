@@ -18,8 +18,10 @@ import {
 } from "@/components/ui/collapsible";
 import { Slider } from "@/components/ui/slider";
 import { RotateCcw, ChevronDown } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
-export type Genre = 
+type Genre =
   | "Action"
   | "Adventure"
   | "Animation"
@@ -38,7 +40,15 @@ export type Genre =
   | "TV Movie"
   | "Thriller"
   | "War"
-  | "Western";
+  | "Western"
+  | "Action & Adventure"
+  | "Kids"
+  | "News"
+  | "Reality"
+  | "Sci-Fi & Fantasy"
+  | "Soap"
+  | "Talk"
+  | "War & Politics";
 
 const allGenres: Genre[] = [
   "Action",
@@ -60,21 +70,63 @@ const allGenres: Genre[] = [
   "Thriller",
   "War",
   "Western",
+  "Action & Adventure",
+  "Kids",
+  "News",
+  "Reality",
+  "Sci-Fi & Fantasy",
+  "Soap",
+  "Talk",
+  "War & Politics",
 ];
 
-export default function PageFilter() {
-  const [sortBy, setSortBy] = useState("popularity.desc");
-  const [genres, setGenres] = useState<Genre[]>([]);
-  const [rating, setRating] = useState(0); // 0‒10
-  const [year, setYear] = useState(2025); // 1970‒2024
-  const [language, setLanguage] = useState("en");
+export default function PageFilter({ type }: { type: string }) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Initial URL params
+  const [sortBy, setSortBy] = useState(
+    searchParams.get("sortBy") || "popularity.desc"
+  );
+
+  const [genres, setGenres] = useState<Genre[]>(() => {
+    const genreParam = searchParams.get("genres");
+    return genreParam ? (genreParam.split(",") as Genre[]) : [];
+  });
+  const [rating, setRating] = useState(() => {
+    const ratingParam = searchParams.get("rating");
+    return ratingParam ? parseFloat(ratingParam) : 0;
+  });
+  const [year, setYear] = useState(() => {
+    const yearParam = searchParams.get("year");
+    return yearParam ? parseInt(yearParam) : 2025;
+  });
+  const [language, setLanguage] = useState(
+    searchParams.get("language") || "en"
+  );
+
+  const applyFilters = () => {
+    const params = new URLSearchParams();
+
+    if (sortBy !== "popularity.desc") params.set("sortBy", sortBy);
+    if (genres.length > 0) params.set("genres", genres.join(","));
+    if (rating > 0) params.set("rating", rating.toString());
+    if (year !== 2025) params.set("year", year.toString());
+    if (language !== "en") params.set("language", language);
+
+    const queryString = params.toString();
+    router.push(`/${type}${queryString ? `?${queryString}` : ""}`);
+  };
 
   const reset = () => {
     setSortBy("popularity.desc");
     setGenres([]);
     setRating(0);
-    setYear(2024);
+    setYear(2025);
     setLanguage("en");
+
+    // clear URL params
+    router.push(`/${type}`);
   };
 
   return (
@@ -185,6 +237,7 @@ export default function PageFilter() {
               />
               <div className="flex justify-between text-[11px] pt-1 text-gray-400">
                 <span>0</span>
+                <span>Current: {rating}</span>
                 <span>10</span>
               </div>
             </CollapsibleContent>
@@ -205,7 +258,7 @@ export default function PageFilter() {
 
             <CollapsibleContent>
               <Slider
-                min={1970}
+                min={1900}
                 max={2025}
                 step={1}
                 value={[year]}
@@ -214,12 +267,14 @@ export default function PageFilter() {
               />
               <div className="flex justify-between text-[11px] pt-1 text-gray-400">
                 <span>1970</span>
-                <span>2024</span>
+                <span>Current: {year}</span>
+                <span>2025</span>
               </div>
             </CollapsibleContent>
           </Collapsible>
           {/* ---------- Apply button ---------- */}
           <Button
+            onClick={applyFilters}
             className="w-full bg-white text-[#0B304F] hover:bg-white/90">
             Apply Filters
           </Button>

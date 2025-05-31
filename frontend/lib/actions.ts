@@ -217,7 +217,13 @@ export async function getShowById(id: string) {
   }
 }
 
-export async function getMovies() {
+export async function getMovies(filters?: {
+  sortBy?: string;
+  genres?: string[];
+  rating?: number;
+  year?: number;
+  language?: string;
+}) {
   const session = await getServerSession(authOptions);
   try {
     const response = await fetch(`${API_URL}/movies/discover`, {
@@ -231,14 +237,56 @@ export async function getMovies() {
       throw new Error("Error fetching movies");
     }
 
-    const result: MovieResult[] = await response.json();
+    let result: MovieResult[] = await response.json();
+
+    if (filters) {
+      if (filters.genres && filters.genres.length > 0) {
+        result = result.filter(movie => 
+          movie.genreIds?.some(genreId => filters.genres!.includes(genreId))
+        );
+      }
+
+      if (filters.rating && filters.rating > 0) {
+        result = result.filter(movie => movie.voteAverage >= filters.rating!);
+      }
+
+      if (filters.year && filters.year !== 2025) {
+        result = result.filter(movie => {
+          const movieYear = new Date(movie.releaseDate).getFullYear();
+          return movieYear === filters.year;
+        });
+      }
+
+      if (filters.sortBy) {
+        switch (filters.sortBy) {
+          case 'vote_average.desc':
+            result.sort((a, b) => b.voteAverage - a.voteAverage);
+            break;
+          case 'primary_release_date.desc':
+            result.sort((a, b) => 
+              new Date(b.releaseDate).getTime() - new Date(a.releaseDate).getTime()
+            );
+            break;
+          case 'popularity.desc':
+          default:
+            break;
+        }
+      }
+    }
+
     return result;
   } catch (error) {
     console.error(`Failed to fetch movies: ${error}`);
   }
 }
 
-export async function getShows() {
+export async function getShows(filters?: {
+  sortBy?: string;
+  genres?: string[];
+  rating?: number;
+  year?: number;
+  language?: string;
+}) {
   const session = await getServerSession(authOptions);
   try {
     const response = await fetch(`${API_URL}/tv/discover`, {
@@ -252,10 +300,40 @@ export async function getShows() {
       throw new Error("Error fetching shows");
     }
 
-    const result: Show[] = await response.json();
+    let result: Show[] = await response.json();
+
+    if (filters) {
+      if (filters.genres && filters.genres.length > 0) {
+        result = result.filter(show => 
+          show.genres?.some(genre => filters.genres!.includes(genre))
+        );
+      }
+
+      if (filters.rating && filters.rating > 0) {
+        result = result.filter(show => show.voteAverage >= filters.rating!);
+      }
+
+      if (filters.language && filters.language !== "en") {
+        result = result.filter(show => show.originalLanguage === filters.language);
+      }
+
+      if (filters.sortBy) {
+        switch (filters.sortBy) {
+          case 'vote_average.desc':
+            result.sort((a, b) => b.voteAverage - a.voteAverage);
+            break;
+          case 'primary_release_date.desc':
+            break;
+          case 'popularity.desc':
+          default:
+            break;
+        }
+      }
+    }
+
     return result;
   } catch (error) {
-    console.error(`Failed to fetch movies: ${error}`);
+    console.error(`Failed to fetch shows: ${error}`);
   }
 }
 
@@ -316,7 +394,7 @@ export async function searchMovies(query: string) {
         authorization: `Bearer ${session?.accessToken?.toString()}`,
         "content-type": "application/json",
       },
-      body: JSON.stringify({ "query": query }),
+      body: JSON.stringify({ query: query }),
       next: { revalidate: 86_400 },
     });
 
@@ -340,7 +418,7 @@ export async function searchShows(query: string) {
         authorization: `Bearer ${session?.accessToken?.toString()}`,
         "content-type": "application/json",
       },
-      body: JSON.stringify({ "query": query }),
+      body: JSON.stringify({ query: query }),
       next: { revalidate: 86_400 },
     });
 
