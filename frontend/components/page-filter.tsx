@@ -19,7 +19,7 @@ import {
 import { Slider } from "@/components/ui/slider";
 import { RotateCcw, ChevronDown } from "lucide-react";
 
-type Genre =
+export type Genre = 
   | "Action"
   | "Adventure"
   | "Animation"
@@ -35,6 +35,7 @@ type Genre =
   | "Mystery"
   | "Romance"
   | "Science Fiction"
+  | "TV Movie"
   | "Thriller"
   | "War"
   | "Western";
@@ -55,6 +56,7 @@ const allGenres: Genre[] = [
   "Mystery",
   "Romance",
   "Science Fiction",
+  "TV Movie",
   "Thriller",
   "War",
   "Western",
@@ -64,7 +66,7 @@ export default function PageFilter() {
   const [sortBy, setSortBy] = useState("popularity.desc");
   const [genres, setGenres] = useState<Genre[]>([]);
   const [rating, setRating] = useState(0); // 0‒10
-  const [year, setYear] = useState(2024); // 1970‒2024
+  const [year, setYear] = useState(2025); // 1970‒2024
   const [language, setLanguage] = useState("en");
 
   const reset = () => {
@@ -112,11 +114,6 @@ export default function PageFilter() {
                   value="primary_release_date.desc"
                   className="text-white focus:bg-white/10 focus:text-white">
                   Newest
-                </SelectItem>
-                <SelectItem
-                  value="revenue.desc"
-                  className="text-white focus:bg-white/10 focus:text-white">
-                  Box-office
                 </SelectItem>
               </SelectContent>
             </Select>
@@ -209,7 +206,7 @@ export default function PageFilter() {
             <CollapsibleContent>
               <Slider
                 min={1970}
-                max={2024}
+                max={2025}
                 step={1}
                 value={[year]}
                 onValueChange={([v]) => setYear(v)}
@@ -221,46 +218,6 @@ export default function PageFilter() {
               </div>
             </CollapsibleContent>
           </Collapsible>
-
-          {/* ---------- Language ---------- */}
-          <Collapsible>
-            <div className="flex items-center justify-between">
-              <h4 className="text-sm font-medium text-white">Language</h4>
-              <CollapsibleTrigger asChild>
-                <button className="text-gray-300 hover:text-white group">
-                  <div className="transition-transform duration-200 group-data-[state=open]:rotate-180">
-                    <ChevronDown className="h-4 w-4" />
-                  </div>
-                </button>
-              </CollapsibleTrigger>
-            </div>
-            <CollapsibleContent>
-              <Select value={language} onValueChange={setLanguage}>
-                <SelectTrigger className="mt-2 h-9 bg-transparent border-gray-600 text-white">
-                  <SelectValue placeholder="English" />
-                </SelectTrigger>
-                <SelectContent className="bg-[#0B304F] border-gray-600">
-                  <SelectItem
-                    value="en"
-                    className="text-white focus:bg-white/10 focus:text-white">
-                    English
-                  </SelectItem>
-                  <SelectItem
-                    value="fr"
-                    className="text-white focus:bg-white/10 focus:text-white">
-                    French
-                  </SelectItem>
-                  <SelectItem
-                    value="es"
-                    className="text-white focus:bg-white/10 focus:text-white">
-                    Spanish
-                  </SelectItem>
-                  {/* …add the languages you care about */}
-                </SelectContent>
-              </Select>
-            </CollapsibleContent>
-          </Collapsible>
-
           {/* ---------- Apply button ---------- */}
           <Button
             className="w-full bg-white text-[#0B304F] hover:bg-white/90">
