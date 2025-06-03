@@ -1,5 +1,6 @@
 package com.example.film_findr.tmdb.dto.tv;
 
+import com.example.film_findr.tmdb.dto.MediaItem;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
@@ -14,5 +15,5 @@ public record TvResult(
         @JsonProperty("backdrop_path") String backdropPath,
         @JsonProperty("genre_ids") List<Integer> genreIds,
         @JsonProperty("vote_average") float voteAverage
-) {
+) implements MediaItem {
 }

@@ -1,5 +1,7 @@
 package com.example.film_findr.tmdb.dto.tv;
 
+import com.example.film_findr.tmdb.dto.EnrichedMediaItem;
+
 import java.util.List;
 
 public record TvResultEnriched(
@@ -12,5 +14,5 @@ public record TvResultEnriched(
         String backdropPath,
         List<String> genres,
         float voteAverage
-) {
+) implements EnrichedMediaItem {
 }
