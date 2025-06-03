@@ -280,16 +280,16 @@ public class TmdbService {
                 });
     }
 
-    public Mono<List<TvResult>> discoverShows() {
+    public Mono<List<TvResult>> discoverShows(String page) {
         return webClient.get()
-                .uri("/discover/tv?language=en-US&api_key={apiKey}", apiKey)
+                .uri("/discover/tv?language=en-US&api_key={apiKey}&page={page}", apiKey, page)
                 .retrieve()
                 .bodyToMono(TrendingTvResponse.class)
                 .map(TrendingTvResponse::results);
     }
 
-    public Mono<List<TvResultEnriched>> discoverShowsWithNames() {
-        return Mono.zip(discoverShows(), fetchImageConfig(), genreMap())
+    public Mono<List<TvResultEnriched>> discoverShowsWithNames(String page) {
+        return Mono.zip(discoverShows(page), fetchImageConfig(), genreMap())
                 .map(tuple -> {
                     var show = tuple.getT1();
                     var imgCfg = tuple.getT2();

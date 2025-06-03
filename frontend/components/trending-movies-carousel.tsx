@@ -24,8 +24,8 @@ const TrendingMoviesCarousel = ({ movies }: { movies: MovieResult[] }) => {
   };
 
   return (
-    <div className="flex flex-col gap-4 ms-[46px]">
-      <h2 className="text-2xl font-semibold text-white px-6">
+    <div className="flex flex-col gap-4 py-8 ms-[46px]">
+      <h2 className="text-2xl font-semibold text-white px-6 relative z-20">
         Trending Movies
       </h2>
 

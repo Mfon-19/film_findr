@@ -105,9 +105,9 @@ public class TvController {
                         new ResponseStatusException(HttpStatus.BAD_GATEWAY, "TMDB request failed: " + ex.getMessage(), ex));
     }
 
-    @GetMapping("/discover")
+    @PostMapping("/discover")
     public Mono<ResponseEntity<List<TvResultEnriched>>> discover(
-            @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader, @RequestBody Map<String, String> req) {
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             return Mono.error(new ResponseStatusException(
@@ -115,9 +115,10 @@ public class TvController {
         }
 
         String token = authHeader.substring("Bearer ".length()).trim();
+        String page = req.get("page");
 
         return Mono.fromCallable(() -> jwt.parseAccessToken(token))
-                .then(tmdb.discoverShowsWithNames())
+                .then(tmdb.discoverShowsWithNames(page))
                 .map(ResponseEntity::ok)
                 .onErrorResume(e -> Mono.error(
                         new ResponseStatusException(

@@ -12,6 +12,8 @@ import {
 } from "./types";
 import { getServerSession } from "next-auth";
 import { JWT } from "next-auth/jwt";
+import { number } from "zod";
+import { pages } from "next/dist/build/templates/app-page";
 
 const API_URL = "http://localhost:8080/api";
 
@@ -292,13 +294,18 @@ export async function getShows(filters?: {
   rating?: number;
   year?: number;
   language?: string;
+  page?: number;
 }) {
   const session = await getServerSession(authOptions);
   try {
+    console.log("page: ", filters?.page)
     const response = await fetch(`${API_URL}/tv/discover`, {
+      method: "POST",
       headers: {
         authorization: `Bearer ${session?.accessToken?.toString()}`,
+        "content-type": "application/json",
       },
+      body: JSON.stringify({"page": filters?.page || 1}),
       next: { revalidate: 86_400 },
     });
 

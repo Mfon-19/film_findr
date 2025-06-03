@@ -15,7 +15,7 @@ export interface HeroSectionProps {
 const HeroSection = (props: HeroSectionProps) => {
   const movieData = props.movieData;
   const heroData = props.heroData;
-  
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const currentFeature = heroData[currentIndex];
@@ -90,7 +90,9 @@ const HeroSection = (props: HeroSectionProps) => {
                 Watch
               </button>
 
-              <button className="inline-flex items-center gap-2 rounded-md bg-gray-200/10 px-5 py-2.5 text-sm font-medium text-white ring-1 ring-inset ring-gray-200/20 hover:bg-gray-200/20 hover:cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40">
+              <button
+                onClick={() => window.location.href = `/movies/${currentFeature.id}`}
+                className="inline-flex items-center gap-2 rounded-md bg-gray-200/10 px-5 py-2.5 text-sm font-medium text-white ring-1 ring-inset ring-gray-200/20 hover:bg-gray-200/20 hover:cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40">
                 <HiOutlineInformationCircle className="h-5 w-5 shrink-0" />
                 More info
               </button>
