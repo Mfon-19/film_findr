@@ -255,16 +255,16 @@ public class TmdbService {
                 });
     }
 
-    public Mono<List<MovieResult>> discoverMovies() {
+    public Mono<List<MovieResult>> discoverMovies(String page) {
         return webClient.get()
-                .uri("/discover/movie?language=en-US&api_key={apiKey}", apiKey)
+                .uri("/discover/movie?language=en-US&api_key={apiKey}&page={page}", apiKey, page)
                 .retrieve()
                 .bodyToMono(DiscoverMovieResponse.class)
                 .map(DiscoverMovieResponse::results);
     }
 
-    public Mono<List<MovieResultEnriched>> discoverMoviesWithNames() {
-        return Mono.zip(discoverMovies(), fetchImageConfig(), genreMap())
+    public Mono<List<MovieResultEnriched>> discoverMoviesWithNames(String page) {
+        return Mono.zip(discoverMovies(page), fetchImageConfig(), genreMap())
                 .map(tuple -> {
                     var movie = tuple.getT1();
                     var imgCfg = tuple.getT2();

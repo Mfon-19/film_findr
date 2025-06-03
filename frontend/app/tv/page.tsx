@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import { useState } from "react";
-import { movieData as tvData } from "@/lib/movie-data";
 import PageFilter from "@/components/page-filter";
 import TVGrid from "@/components/tv-grid";
 import TvPageHeader from "@/components/tv-page-header";
@@ -40,7 +39,7 @@ export default async function TVPage({ searchParams }: TVPageProps) {
         <TvPageHeader
           start={1}
           end={filteredShows.length || 5}
-          total={tvData.length}
+          total={filteredShows.length}
         />
         <div className="mt-6 px-4 md:px-12">
           <TVGrid shows={filteredShows} />

@@ -63,19 +63,20 @@ public class MovieController {
                                 HttpStatus.UNAUTHORIZED, "Token is expired or invalid", e)));
     }
 
-    @GetMapping("/discover")
+    @PostMapping("/discover")
     public Mono<ResponseEntity<List<MovieResultEnriched>>> discover(
-            @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader, @RequestBody Map<String, String> request) {
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             return Mono.error(new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Missing Bearer access token"));
         }
 
+        String page = request.get("page");
         String token = authHeader.substring("Bearer ".length()).trim();
 
         return Mono.fromCallable(() -> jwt.parseAccessToken(token))
-                .then(tmdb.discoverMoviesWithNames())
+                .then(tmdb.discoverMoviesWithNames(page))
                 .map(ResponseEntity::ok)
                 .onErrorResume(e -> Mono.error(
                         new ResponseStatusException(

@@ -223,13 +223,17 @@ export async function getMovies(filters?: {
   rating?: number;
   year?: number;
   language?: string;
+  page?: number;
 }) {
   const session = await getServerSession(authOptions);
   try {
     const response = await fetch(`${API_URL}/movies/discover`, {
+      method: "POST",
       headers: {
         authorization: `Bearer ${session?.accessToken?.toString()}`,
+        "content-type": "application/json",
       },
+      body: JSON.stringify({ page: filters?.page || 1 }),
       next: { revalidate: 86_400 },
     });
 
@@ -241,17 +245,17 @@ export async function getMovies(filters?: {
 
     if (filters) {
       if (filters.genres && filters.genres.length > 0) {
-        result = result.filter(movie => 
-          movie.genreIds?.some(genreId => filters.genres!.includes(genreId))
+        result = result.filter((movie) =>
+          movie.genreIds?.some((genreId) => filters.genres!.includes(genreId))
         );
       }
 
       if (filters.rating && filters.rating > 0) {
-        result = result.filter(movie => movie.voteAverage >= filters.rating!);
+        result = result.filter((movie) => movie.voteAverage >= filters.rating!);
       }
 
       if (filters.year && filters.year !== 2025) {
-        result = result.filter(movie => {
+        result = result.filter((movie) => {
           const movieYear = new Date(movie.releaseDate).getFullYear();
           return movieYear === filters.year;
         });
@@ -259,15 +263,17 @@ export async function getMovies(filters?: {
 
       if (filters.sortBy) {
         switch (filters.sortBy) {
-          case 'vote_average.desc':
+          case "vote_average.desc":
             result.sort((a, b) => b.voteAverage - a.voteAverage);
             break;
-          case 'primary_release_date.desc':
-            result.sort((a, b) => 
-              new Date(b.releaseDate).getTime() - new Date(a.releaseDate).getTime()
+          case "primary_release_date.desc":
+            result.sort(
+              (a, b) =>
+                new Date(b.releaseDate).getTime() -
+                new Date(a.releaseDate).getTime()
             );
             break;
-          case 'popularity.desc':
+          case "popularity.desc":
           default:
             break;
         }
@@ -304,27 +310,29 @@ export async function getShows(filters?: {
 
     if (filters) {
       if (filters.genres && filters.genres.length > 0) {
-        result = result.filter(show => 
-          show.genres?.some(genre => filters.genres!.includes(genre))
+        result = result.filter((show) =>
+          show.genres?.some((genre) => filters.genres!.includes(genre))
         );
       }
 
       if (filters.rating && filters.rating > 0) {
-        result = result.filter(show => show.voteAverage >= filters.rating!);
+        result = result.filter((show) => show.voteAverage >= filters.rating!);
       }
 
       if (filters.language && filters.language !== "en") {
-        result = result.filter(show => show.originalLanguage === filters.language);
+        result = result.filter(
+          (show) => show.originalLanguage === filters.language
+        );
       }
 
       if (filters.sortBy) {
         switch (filters.sortBy) {
-          case 'vote_average.desc':
+          case "vote_average.desc":
             result.sort((a, b) => b.voteAverage - a.voteAverage);
             break;
-          case 'primary_release_date.desc':
+          case "primary_release_date.desc":
             break;
-          case 'popularity.desc':
+          case "popularity.desc":
           default:
             break;
         }
