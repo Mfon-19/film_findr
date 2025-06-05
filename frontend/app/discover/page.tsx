@@ -34,16 +34,15 @@ const Page = async () => {
     !trendingShows ||
     !topRatedShows
   )
-    return null;
+    throw new Error();
 
   const heroSectionMovies = await getMoviesById(heroMoviesIds);
-  if (!heroSectionMovies) return null;
+  if (!heroSectionMovies) throw new Error();
 
   return (
     <div className="flex flex-col">
       <HeroSection movieData={topRatedMovies} heroData={heroSectionMovies} />
       <div className="bg-[#00050d]">
-        {/* TODO: The "Trending Movies" text in this component is not showing. Fix it */}
         <TrendingMoviesCarousel movies={trendingMovies} />
         <TopRatedMoviesCarousel movies={topRatedMovies} />
         <TrendingShowsCarousel shows={trendingShows} />

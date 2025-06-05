@@ -1,8 +1,8 @@
 "use client";
 
 import { Show } from "@/lib/types";
-import MovieCard from "./movie-card";
 import EntityGrid from "./entity-grid";
+import MediaCard from "./ui/media-card";
 
 interface TVGridProps {
   shows: Show[];
@@ -14,7 +14,7 @@ export default function TVGrid({ shows }: TVGridProps) {
       items={shows}
       renderItem={(show) => (
         <div key={show.id} className="relative">
-          <MovieCard
+          <MediaCard
             type="tv"
             id={show.id}
             src={show.posterPath}

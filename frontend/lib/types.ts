@@ -102,3 +102,55 @@ export interface ShowDetails extends Show {
 interface CreatedBy {
   name: string;
 }
+
+export type MediaType = "movies" | "tv";
+
+export interface MediaCardProps {
+  type: MediaType;
+  id?: number;
+  src: string;
+  title: string;
+  rating: number;
+  description?: string;
+  year?: number;
+  alt?: string;
+  // TV-specific props
+  firstAirDate?: string;
+  // Movie-specific props
+  releaseDate?: string;
+}
+
+export interface MediaCardContentProps extends MediaCardProps {
+  displayYear: number | undefined;
+  imageSrc: string;
+}
+
+export interface BasicInfoProps {
+  title: string;
+  displayYear: number | undefined;
+  rating: number;
+}
+
+export interface ActionButtonsProps {
+  onPlayClick?: (e: React.MouseEvent) => void;
+  onAddClick?: (e: React.MouseEvent) => void;
+}
+
+export interface PosterImageProps {
+  src: string;
+  alt: string;
+  aspectRatio?: "poster" | "landscape";
+  className?: string;
+}
+
+export interface HoverDetailPanelProps {
+  imageSrc: string;
+  alt: string;
+  title: string;
+  rating: number;
+  displayYear: number | undefined;
+  description: string;
+  type: MediaType;
+  onPlayClick?: (e: React.MouseEvent) => void;
+  onAddClick?: (e: React.MouseEvent) => void;
+}

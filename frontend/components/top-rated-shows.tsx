@@ -3,7 +3,7 @@
 import { Show } from "@/lib/types";
 import React, { useRef } from "react";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
-import MovieCard from "./movie-card";
+import MediaCard from "./ui/media-card";
 
 const TopRatedShowsCarousel = ({ shows }: { shows: Show[] }) => {
   const carouselRef = useRef<HTMLDivElement>(null);
@@ -25,7 +25,9 @@ const TopRatedShowsCarousel = ({ shows }: { shows: Show[] }) => {
 
   return (
     <div className="flex flex-col gap-4 ms-[46px]">
-      <h2 className="text-2xl font-semibold text-white px-6">Top Rated Shows</h2>
+      <h2 className="text-2xl font-semibold text-white px-6">
+        Top Rated Shows
+      </h2>
 
       {/* Carousel Container */}
       <div className="relative">
@@ -46,7 +48,7 @@ const TopRatedShowsCarousel = ({ shows }: { shows: Show[] }) => {
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
           {shows?.map((show: Show) => (
             <div key={show.id} className="flex-shrink-0 w-[180px]">
-              <MovieCard
+              <MediaCard
                 type="tv"
                 id={show.id}
                 title={show.name}

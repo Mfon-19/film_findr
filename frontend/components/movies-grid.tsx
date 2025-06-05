@@ -1,7 +1,7 @@
 "use client";
 
 import { MovieResult } from "@/lib/types";
-import MovieCard from "./movie-card";
+import MediaCard from "./ui/media-card";
 import EntityGrid from "./entity-grid";
 
 interface MoviesGridProps {
@@ -14,7 +14,7 @@ export default function MoviesGrid({ movies }: MoviesGridProps) {
       items={movies}
       renderItem={(movie) => (
         <div key={movie.id} className="relative">
-          <MovieCard
+          <MediaCard
             type="movies"
             id={movie.id}
             src={movie.posterPath}

@@ -1,6 +1,6 @@
-import MovieCard from "./movie-card";
 import Link from "next/link";
 import { MovieResult } from "@/lib/types";
+import MediaCard from "./ui/media-card";
 
 export default async function SimilarMovies({ similarMovies }: { similarMovies: MovieResult[] }) {
   return (
@@ -17,8 +17,8 @@ export default async function SimilarMovies({ similarMovies }: { similarMovies: 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {similarMovies.map((movie) => (
           <div key={movie.id} className="relative">
-            <MovieCard
-              type="shows"
+            <MediaCard
+              type="movies"
               id={movie.id}
               src={movie.posterPath}
               title={movie.title}

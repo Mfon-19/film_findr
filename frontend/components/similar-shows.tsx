@@ -1,6 +1,6 @@
-import MovieCard from "./movie-card";
 import Link from "next/link";
 import { Show } from "@/lib/types";
+import MediaCard from "./ui/media-card";
 
 export default function SimilarShows({
   similarShows,
@@ -21,7 +21,7 @@ export default function SimilarShows({
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {similarShows.map((show) => (
           <div key={show.id} className="relative">
-            <MovieCard
+            <MediaCard
               type="tv"
               id={show.id}
               src={show.posterPath}

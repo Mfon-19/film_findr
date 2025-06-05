@@ -3,7 +3,7 @@
 import { Show } from "@/lib/types";
 import React, { useRef } from "react";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
-import MovieCard from "./movie-card";
+import MediaCard from "./ui/media-card";
 
 const TrendingShowsCarousel = ({ shows }: { shows: Show[] }) => {
   const carouselRef = useRef<HTMLDivElement>(null);
@@ -46,7 +46,7 @@ const TrendingShowsCarousel = ({ shows }: { shows: Show[] }) => {
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
           {shows?.map((show: Show) => (
             <div key={show.id} className="flex-shrink-0 w-[180px]">
-              <MovieCard
+              <MediaCard
                 type="tv"
                 id={show.id}
                 title={show.name}

@@ -7,7 +7,7 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { MovieResult, Show } from "@/lib/types";
-import MovieCard from "@/components/movie-card";
+import MediaCard from "./ui/media-card";
 import { searchMovies, searchShows } from "@/lib/actions";
 
 interface SearchResults {
@@ -34,7 +34,6 @@ export default function SearchPageComponent({
   );
   const [showFilters, setShowFilters] = useState(false);
 
-  // Simulate search API call
   const performSearch = async (query: string): Promise<void> => {
     if (!query.trim()) {
       setResults({ movies: [], shows: [] });
@@ -50,7 +49,6 @@ export default function SearchPageComponent({
 
     if (!movies || !shows) throw new Error();
 
-    // Filter mock results based on query
     const filteredResults: SearchResults = {
       movies,
       shows,
@@ -60,7 +58,6 @@ export default function SearchPageComponent({
     setIsLoading(false);
   };
 
-  // Initialize search with initialQuery
   useEffect(() => {
     if (initialQuery) {
       performSearch(initialQuery);
@@ -89,7 +86,6 @@ export default function SearchPageComponent({
   const totalResults = results.movies.length + results.shows.length;
   const filtered = filteredResults();
 
-  // Helper function to get movie year from releaseDate
   const getMovieYear = (releaseDate: string): number | undefined => {
     if (!releaseDate) return undefined;
     return new Date(releaseDate).getFullYear();
@@ -198,7 +194,7 @@ export default function SearchPageComponent({
                 <h2 className="text-2xl font-bold text-white mb-6">Movies</h2>
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
                   {filtered.movies.map((movie) => (
-                    <MovieCard
+                    <MediaCard
                       key={movie.id}
                       type="movies"
                       id={movie.id}
@@ -220,7 +216,7 @@ export default function SearchPageComponent({
                 <h2 className="text-2xl font-bold text-white mb-6">TV Shows</h2>
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
                   {filtered.shows.map((show) => (
-                    <MovieCard
+                    <MediaCard
                       key={show.id}
                       type="tv"
                       id={show.id}
