@@ -1,11 +1,18 @@
 "use client";
 
-import { Show } from "@/lib/types";
+import { MovieResult, Show } from "@/lib/types";
 import React, { useRef } from "react";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 import MediaCard from "./ui/media-card";
 
-const TrendingShowsCarousel = ({ shows }: { shows: Show[] }) => {
+type MediaItem = MovieResult | Show;
+
+interface MediaCarouselProps {
+  title: string;
+  items: MediaItem[];
+}
+
+const MediaCarousel = ({ title, items }: MediaCarouselProps) => {
   const carouselRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: "left" | "right") => {
@@ -23,13 +30,21 @@ const TrendingShowsCarousel = ({ shows }: { shows: Show[] }) => {
     }
   };
 
-  return (
-    <div className="flex flex-col gap-4 ms-[46px]">
-      <h2 className="text-2xl font-semibold text-white px-6">Trending Shows</h2>
+  const getTitle = (item: MediaItem) => {
+    return "title" in item ? item.title : item.name;
+  };
 
-      {/* Carousel Container */}
+  const getMediaType = (item: MediaItem) => {
+    return "title" in item ? "movies" : "tv";
+  };
+
+  return (
+    <div className="flex flex-col gap-4 py-8 ms-[46px]">
+      <h2 className="text-2xl font-semibold text-white px-6 relative z-20">
+        {title}
+      </h2>
+
       <div className="relative">
-        {/* Left scroll button */}
         <button
           onClick={() => scroll("left")}
           className="absolute left-2 top-1/2 z-10 -translate-y-1/2 bg-black/50 p-2 rounded-full 
@@ -39,27 +54,25 @@ const TrendingShowsCarousel = ({ shows }: { shows: Show[] }) => {
           <IoChevronBack className="h-6 w-6 text-white" />
         </button>
 
-        {/* Shows container */}
         <div
           ref={carouselRef}
           className="flex gap-4 overflow-x-auto scrollbar-hide px-6 py-4"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
-          {shows?.map((show: Show) => (
-            <div key={show.id} className="flex-shrink-0 w-[180px]">
+          {items?.map((item: MediaItem) => (
+            <div key={item.id} className="flex-shrink-0 w-[180px]">
               <MediaCard
-                type="tv"
-                id={show.id}
-                title={show.name}
-                src={show.posterPath}
-                alt={show.alt || ""}
-                rating={show.voteAverage}
-                description={show.overview}
+                type={getMediaType(item)}
+                id={item.id}
+                title={getTitle(item)}
+                src={item.posterPath}
+                alt={item.alt || ""}
+                rating={item.voteAverage}
+                description={item.overview}
               />
             </div>
           ))}
         </div>
 
-        {/* Right scroll button */}
         <button
           onClick={() => scroll("right")}
           className="absolute right-2 top-1/2 z-10 -translate-y-1/2 bg-black/50 p-2 rounded-full 
@@ -73,4 +86,4 @@ const TrendingShowsCarousel = ({ shows }: { shows: Show[] }) => {
   );
 };
 
-export default TrendingShowsCarousel;
+export default MediaCarousel;

@@ -1,8 +1,5 @@
 import HeroSection from "@/components/hero-section";
-import TopRatedMoviesCarousel from "@/components/top-rated-movies-carousel";
-import TopRatedShowsCarousel from "@/components/top-rated-shows";
-import TrendingMoviesCarousel from "@/components/trending-movies-carousel";
-import TrendingShowsCarousel from "@/components/trending-shows-carousel";
+import MediaCarousel from "@/components/media-carousel";
 import {
   getMoviesById,
   getTopRatedMovies,
@@ -43,10 +40,10 @@ const Page = async () => {
     <div className="flex flex-col">
       <HeroSection movieData={topRatedMovies} heroData={heroSectionMovies} />
       <div className="bg-[#00050d]">
-        <TrendingMoviesCarousel movies={trendingMovies} />
-        <TopRatedMoviesCarousel movies={topRatedMovies} />
-        <TrendingShowsCarousel shows={trendingShows} />
-        <TopRatedShowsCarousel shows={topRatedShows} />
+        <MediaCarousel title="Trending Movies" items={trendingMovies} />
+        <MediaCarousel title="Top Rated Movies" items={topRatedMovies} />
+        <MediaCarousel title="Trending Shows" items={trendingShows} />
+        <MediaCarousel title="Top Rated Shows" items={topRatedShows} />
       </div>
     </div>
   );

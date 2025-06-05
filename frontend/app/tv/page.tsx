@@ -1,5 +1,6 @@
 import GridPageLayout from "@/components/layouts/grid-page-layout";
-import TVGrid from "@/components/tv-grid";
+import EntityGrid from "@/components/entity-grid";
+import MediaCard from "@/components/ui/media-card";
 import { getShows } from "@/lib/actions";
 import { parseSearchParams } from "@/lib/utils/searchParams";
 
@@ -36,7 +37,22 @@ export default async function TVPage({ searchParams }: TVPageProps) {
         totalItems={TOTAL_ITEMS}
         itemsPerPage={ITEMS_PER_PAGE}
         maxPages={MAX_PAGES}>
-        <TVGrid shows={shows} />
+        <EntityGrid
+          items={shows}
+          renderItem={(show) => (
+            <div key={show.id} className="relative">
+              <MediaCard
+                type="tv"
+                id={show.id}
+                src={show.posterPath}
+                title={show.name}
+                rating={show.voteAverage}
+                description={show.overview}
+                alt={show.alt || "show"}
+              />
+            </div>
+          )}
+        />
       </GridPageLayout>
     );
   } catch (error) {

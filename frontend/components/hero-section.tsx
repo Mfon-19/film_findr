@@ -5,7 +5,6 @@ import React, { useState, useEffect } from "react";
 import { FaPlay } from "react-icons/fa";
 import { HiOutlineInformationCircle } from "react-icons/hi";
 import { MovieDetails, MovieResult } from "@/lib/types";
-import TopRatedMoviesCarousel from "./top-rated-movies-carousel";
 
 export interface HeroSectionProps {
   movieData: MovieResult[];
@@ -115,10 +114,6 @@ const HeroSection = (props: HeroSectionProps) => {
             </div>
           </div>
         </div>
-      </section>
-
-      <section className="-mt-12 md:-mt-16 relative z-1">
-        {/* <TopRatedMoviesCarousel movies={movieData} /> */}
       </section>
     </main>
   );

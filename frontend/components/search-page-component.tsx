@@ -9,6 +9,7 @@ import {
 import { MovieResult, Show } from "@/lib/types";
 import MediaCard from "./ui/media-card";
 import { searchMovies, searchShows } from "@/lib/actions";
+import EntityGrid from "./entity-grid";
 
 interface SearchResults {
   movies: MovieResult[];
@@ -22,7 +23,7 @@ interface SearchPageComponentProps {
 export default function SearchPageComponent({
   initialQuery = "",
 }: SearchPageComponentProps) {
-  console.log("Query: ", initialQuery)
+  console.log("Query: ", initialQuery);
   const [searchQuery, setSearchQuery] = useState(initialQuery);
   const [results, setResults] = useState<SearchResults>({
     movies: [],
@@ -89,6 +90,11 @@ export default function SearchPageComponent({
   const getMovieYear = (releaseDate: string): number | undefined => {
     if (!releaseDate) return undefined;
     return new Date(releaseDate).getFullYear();
+  };
+
+  const getShowYear = (firstAirDate: string): number | undefined => {
+    if (!firstAirDate) return undefined;
+    return new Date(firstAirDate).getFullYear();
   };
 
   return (
@@ -192,8 +198,9 @@ export default function SearchPageComponent({
             {filtered.movies.length > 0 && (
               <div className="mb-12">
                 <h2 className="text-2xl font-bold text-white mb-6">Movies</h2>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-                  {filtered.movies.map((movie) => (
+                <EntityGrid
+                  items={filtered.movies}
+                  renderItem={(movie: MovieResult) => (
                     <MediaCard
                       key={movie.id}
                       type="movies"
@@ -205,8 +212,9 @@ export default function SearchPageComponent({
                       year={getMovieYear(movie.releaseDate)}
                       alt={movie.alt}
                     />
-                  ))}
-                </div>
+                  )}
+                  className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4"
+                />
               </div>
             )}
 
@@ -214,8 +222,9 @@ export default function SearchPageComponent({
             {filtered.shows.length > 0 && (
               <div className="mb-12">
                 <h2 className="text-2xl font-bold text-white mb-6">TV Shows</h2>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-                  {filtered.shows.map((show) => (
+                <EntityGrid
+                  items={filtered.shows}
+                  renderItem={(show: Show) => (
                     <MediaCard
                       key={show.id}
                       type="tv"
@@ -226,8 +235,9 @@ export default function SearchPageComponent({
                       description={show.overview}
                       alt={show.alt}
                     />
-                  ))}
-                </div>
+                  )}
+                  className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4"
+                />
               </div>
             )}
 
