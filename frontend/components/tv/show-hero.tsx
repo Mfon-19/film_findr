@@ -3,7 +3,7 @@ import Image from "next/image";
 import Rating from "@/components/ui/rating";
 import ActionButtons from "@/components/ui/action-buttons";
 import { ShowDetails, Content } from "@/lib/types";
-import { MOVIE_POSTER_PLACEHOLDER } from "@/lib/utils";
+import { getImageSrc } from "@/lib/utils";
 import { addToWatchlist } from "@/lib/actions";
 import { toast } from "sonner";
 
@@ -12,9 +12,7 @@ interface ShowHeroProps {
 }
 
 export default function ShowHero({ show }: ShowHeroProps) {
-  const imageSrc = show.posterPath.includes("null")
-    ? MOVIE_POSTER_PLACEHOLDER
-    : show.posterPath;
+  const imageSrc = getImageSrc(show.posterPath);
 
   const formatSeasons = (count: number) => {
     return `${count} season${count !== 1 ? "s" : ""}`;
@@ -31,7 +29,10 @@ export default function ShowHero({ show }: ShowHeroProps) {
       title: show.name,
       rating: show.voteAverage,
       posterPath: show.posterPath,
-      overview: show.overview.length > 100 ? show.overview.substring(0, 100) + "..." : show.overview,
+      overview:
+        show.overview.length > 100
+          ? show.overview.substring(0, 100) + "..."
+          : show.overview,
       createdAt: new Date().toISOString(),
     };
     try {

@@ -5,6 +5,7 @@ import ActionButtons from "@/components/ui/action-buttons";
 import { MovieDetails, Content } from "@/lib/types";
 import { addToWatchlist } from "@/lib/actions";
 import { toast } from "sonner";
+import { getImageSrc } from "@/lib/utils";
 
 interface MovieHeroProps {
   movie: MovieDetails;
@@ -42,7 +43,7 @@ export default function MovieHero({ movie }: MovieHeroProps) {
       <div className="container mx-auto flex flex-col md:flex-row gap-8 items-end">
         <div className="relative h-64 w-44 overflow-hidden rounded-md shadow-xl hidden md:block">
           <Image
-            src={movie.posterPath}
+            src={getImageSrc(movie.posterPath)}
             alt={movie.alt || movie.title}
             fill
             className="object-cover"

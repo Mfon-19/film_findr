@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { getImageSrc } from "@/lib/utils";
 
 interface DetailPageLayoutProps {
   children: ReactNode;
@@ -27,7 +28,7 @@ export default function DetailPageLayout({
       {/* Hero section */}
       <div className="relative h-[70vh] w-full">
         <Image
-          src={backdropPath}
+          src={getImageSrc(backdropPath)}
           alt={title}
           fill
           className="object-cover brightness-50"

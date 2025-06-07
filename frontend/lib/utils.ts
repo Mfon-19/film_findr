@@ -79,7 +79,7 @@ export const getDisplayYear = (
 ): number | undefined => {
   if (year) return year;
 
-  if (type === "movie" && releaseDate) {
+  if (type === "movies" && releaseDate) {
     return new Date(releaseDate).getFullYear();
   }
 

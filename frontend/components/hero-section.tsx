@@ -5,6 +5,7 @@ import React, { useState, useEffect } from "react";
 import { FaPlay } from "react-icons/fa";
 import { HiOutlineInformationCircle } from "react-icons/hi";
 import { MovieDetails, MovieResult } from "@/lib/types";
+import { getImageSrc } from "@/lib/utils";
 
 export interface HeroSectionProps {
   movieData: MovieResult[];
@@ -48,7 +49,7 @@ const HeroSection = (props: HeroSectionProps) => {
             isTransitioning ? "opacity-0 scale-110" : "opacity-100 scale-100"
           }`}>
           <Image
-            src={currentFeature.backdropPath}
+            src={getImageSrc(currentFeature.backdropPath)}
             alt={currentFeature.alt || currentFeature.title}
             className="absolute inset-0 h-full w-full object-cover"
             width={1920}
