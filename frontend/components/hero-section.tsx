@@ -49,7 +49,7 @@ const HeroSection = (props: HeroSectionProps) => {
           }`}>
           <Image
             src={currentFeature.backdropPath}
-            alt={currentFeature.alt || "movie poster image"}
+            alt={currentFeature.alt || currentFeature.title}
             className="absolute inset-0 h-full w-full object-cover"
             width={1920}
             height={1080}
@@ -90,7 +90,9 @@ const HeroSection = (props: HeroSectionProps) => {
               </button>
 
               <button
-                onClick={() => window.location.href = `/movies/${currentFeature.id}`}
+                onClick={() =>
+                  (window.location.href = `/movies/${currentFeature.id}`)
+                }
                 className="inline-flex items-center gap-2 rounded-md bg-gray-200/10 px-5 py-2.5 text-sm font-medium text-white ring-1 ring-inset ring-gray-200/20 hover:bg-gray-200/20 hover:cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40">
                 <HiOutlineInformationCircle className="h-5 w-5 shrink-0" />
                 More info

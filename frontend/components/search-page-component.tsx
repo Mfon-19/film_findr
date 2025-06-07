@@ -198,9 +198,8 @@ export default function SearchPageComponent({
             {filtered.movies.length > 0 && (
               <div className="mb-12">
                 <h2 className="text-2xl font-bold text-white mb-6">Movies</h2>
-                <EntityGrid
-                  items={filtered.movies}
-                  renderItem={(movie: MovieResult) => (
+                <EntityGrid className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+                  {filtered.movies.map((movie) => (
                     <MediaCard
                       key={movie.id}
                       type="movies"
@@ -212,9 +211,8 @@ export default function SearchPageComponent({
                       year={getMovieYear(movie.releaseDate)}
                       alt={movie.alt}
                     />
-                  )}
-                  className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4"
-                />
+                  ))}
+                </EntityGrid>
               </div>
             )}
 
@@ -222,9 +220,8 @@ export default function SearchPageComponent({
             {filtered.shows.length > 0 && (
               <div className="mb-12">
                 <h2 className="text-2xl font-bold text-white mb-6">TV Shows</h2>
-                <EntityGrid
-                  items={filtered.shows}
-                  renderItem={(show: Show) => (
+                <EntityGrid className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+                  {filtered.shows.map((show) => (
                     <MediaCard
                       key={show.id}
                       type="tv"
@@ -235,9 +232,8 @@ export default function SearchPageComponent({
                       description={show.overview}
                       alt={show.alt}
                     />
-                  )}
-                  className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4"
-                />
+                  ))}
+                </EntityGrid>
               </div>
             )}
 

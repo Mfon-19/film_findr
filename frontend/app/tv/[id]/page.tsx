@@ -25,7 +25,7 @@ async function getShowData(id: string) {
 }
 
 export default async function ShowPage({ params }: { params: { id: string } }) {
-  const id = await params.id;
+  const { id } = await params;
   const { show, similarShows } = await getShowData(id);
 
   if (!show) notFound();
@@ -45,7 +45,7 @@ export default async function ShowPage({ params }: { params: { id: string } }) {
 }
 
 export async function generateMetadata({ params }: { params: { id: string } }) {
-  const id = await params.id;
+  const { id } = await params;
   const show = await getShowById(id);
 
   if (!show) {

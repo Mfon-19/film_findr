@@ -15,6 +15,7 @@ import { getServerSession } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import { number } from "zod";
 import { pages } from "next/dist/build/templates/app-page";
+import { UUID } from "crypto";
 
 const API_URL = "http://localhost:8080/api";
 
@@ -458,7 +459,7 @@ export async function getWatchlist() {
         authorization: `Bearer ${session?.accessToken?.toString()}`,
         "content-type": "application/json",
       },
-      body: JSON.stringify({ userId: session?.user.id }),
+      body: JSON.stringify({ userId: session?.user.id as UUID}),
     });
 
     if (!response.ok) {
@@ -474,7 +475,6 @@ export async function getWatchlist() {
 
 export async function addToWatchlist(content: Content) {
   const session = await getServerSession(authOptions);
-  console.log(JSON.stringify(content))
   try {
     const response = await fetch(`${API_URL}/user/add-to-watchlist`, {
       method: "POST",
@@ -482,10 +482,11 @@ export async function addToWatchlist(content: Content) {
         authorization: `Bearer ${session?.accessToken?.toString()}`,
         "content-type": "application/json",
       },
-      body: JSON.stringify({ userId: session?.user.id, content: content }),
+      body: JSON.stringify({ userId: session?.user.id as UUID, content: content }),
     });
 
     if (!response.ok) {
+      console.log("The response is: ", response)
       throw new Error("Error adding to watchlist");
     }
   } catch (error) {

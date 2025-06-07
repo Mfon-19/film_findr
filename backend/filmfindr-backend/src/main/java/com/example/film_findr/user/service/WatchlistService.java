@@ -46,6 +46,8 @@ public class WatchlistService {
 
     @Transactional(readOnly = true)
     public List<Content> getWatchlist(UUID userId) {
-        return contentRepository.findWatchlistContentsByUserId(userId);
+        List<Content> watchlist = contentRepository.findWatchlistContentsByUserId(userId);
+        watchlist.forEach((watchlistContent) -> watchlistContent.setId(watchlistContent.getId().substring(3)));
+        return watchlist;
     }
 }

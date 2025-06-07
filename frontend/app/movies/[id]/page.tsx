@@ -29,7 +29,7 @@ export default async function MoviePage({
 }: {
   params: { id: string };
 }) {
-  const id = await params.id;
+  const { id } = await params;
   const { movie, similarMovies } = await getMovieData(id);
 
   if (!movie) notFound();
@@ -49,7 +49,7 @@ export default async function MoviePage({
 }
 
 export async function generateMetadata({ params }: { params: { id: string } }) {
-  const id = await params.id;
+  const { id } = await params;
   const movie = await getMovieById(id);
 
   if (!movie) {

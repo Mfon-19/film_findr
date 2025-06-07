@@ -9,57 +9,18 @@ import {
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
 import MediaCard from "@/components/ui/media-card";
-import { MovieResult, Show } from "@/lib/types";
+import { Content } from "@/lib/types";
 
-// Mock data for demonstration - in a real app, this would come from an API/database
-const mockWatchlistMovies: MovieResult[] = [
-  {
-    id: 1,
-    title: "The Dark Knight",
-    alt: "The Dark Knight poster",
-    imgSrc: "/placeholder.jpg",
-    overview: "Batman faces the Joker in this epic tale of heroism and chaos.",
-    posterPath:
-      "https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
-    releaseDate: "2008-07-18",
-    voteAverage: 9.0,
-    genreIds: ["Action", "Crime", "Drama"],
-  },
-  {
-    id: 2,
-    title: "Inception",
-    alt: "Inception poster",
-    imgSrc: "/placeholder.jpg",
-    overview: "A mind-bending thriller about dreams within dreams.",
-    posterPath:
-      "https://image.tmdb.org/t/p/w500/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg",
-    releaseDate: "2010-07-16",
-    voteAverage: 8.8,
-    genreIds: ["Action", "Sci-Fi", "Thriller"],
-  },
-];
+interface WatchlistSectionProps {
+  watchlistMovies: Content[];
+  watchlistShows: Content[];
+}
 
-const mockWatchlistShows: Show[] = [
-  {
-    id: 1,
-    name: "Breaking Bad",
-    adult: false,
-    overview:
-      "A high school chemistry teacher turned methamphetamine manufacturer.",
-    originalLanguage: "en",
-    posterPath:
-      "https://image.tmdb.org/t/p/w500/ggFHVNu6YYI5L9pCfOacjizRGt.jpg",
-    backdropPath: "/placeholder.jpg",
-    alt: "Breaking Bad poster",
-    genres: ["Crime", "Drama", "Thriller"],
-    voteAverage: 9.5,
-  },
-];
-
-export default function WatchlistSection() {
+export default function WatchlistSection({
+  watchlistMovies,
+  watchlistShows,
+}: WatchlistSectionProps) {
   const [activeTab, setActiveTab] = useState<"all" | "movies" | "shows">("all");
-  const [watchlistMovies] = useState<MovieResult[]>(mockWatchlistMovies);
-  const [watchlistShows] = useState<Show[]>(mockWatchlistShows);
 
   const totalItems = watchlistMovies.length + watchlistShows.length;
 
@@ -103,7 +64,8 @@ export default function WatchlistSection() {
             activeTab === "all"
               ? "bg-white/10 text-white"
               : "text-gray-400 hover:text-white hover:bg-white/5"
-          }`}>
+          }`}
+        >
           All ({totalItems})
         </button>
         <button
@@ -112,7 +74,8 @@ export default function WatchlistSection() {
             activeTab === "movies"
               ? "bg-white/10 text-white"
               : "text-gray-400 hover:text-white hover:bg-white/5"
-          }`}>
+          }`}
+        >
           <FilmIcon className="h-4 w-4" />
           Movies ({watchlistMovies.length})
         </button>
@@ -122,7 +85,8 @@ export default function WatchlistSection() {
             activeTab === "shows"
               ? "bg-white/10 text-white"
               : "text-gray-400 hover:text-white hover:bg-white/5"
-          }`}>
+          }`}
+        >
           <TvIcon className="h-4 w-4" />
           TV Shows ({watchlistShows.length})
         </button>
@@ -161,13 +125,12 @@ export default function WatchlistSection() {
                   <MediaCard
                     key={`movie-${movie.id}`}
                     type="movies"
-                    id={movie.id}
+                    id={parseInt(movie.id)}
                     src={movie.posterPath}
                     title={movie.title}
-                    rating={movie.voteAverage}
+                    rating={movie.rating}
                     description={movie.overview}
-                    releaseDate={movie.releaseDate}
-                    alt={movie.alt}
+                    alt={movie.title}
                   />
                 ))}
               </div>
@@ -186,12 +149,12 @@ export default function WatchlistSection() {
                   <MediaCard
                     key={`show-${show.id}`}
                     type="tv"
-                    id={show.id}
+                    id={parseInt(show.id)}
                     src={show.posterPath}
-                    title={show.name}
-                    rating={show.voteAverage}
+                    title={show.title}
+                    rating={show.rating}
                     description={show.overview}
-                    alt={show.alt}
+                    alt={show.title}
                   />
                 ))}
               </div>

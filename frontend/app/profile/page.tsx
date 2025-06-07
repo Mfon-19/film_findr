@@ -1,13 +1,24 @@
 import { Metadata } from "next";
 import { UserCircleIcon, BookmarkIcon } from "@heroicons/react/24/outline";
 import WatchlistSection from "./components/watchlist-section";
+import { getWatchlist } from "@/lib/actions";
+import { Content } from "@/lib/types";
 
 export const metadata: Metadata = {
   title: "Profile | Film Findr",
   description: "Your profile and watchlist",
 };
 
-export default function ProfilePage() {
+export default async function ProfilePage() {
+  const watchlist = (await getWatchlist()) ?? [];
+
+  const watchlistMovies = watchlist.filter(
+    (item: Content) => item.itemType === "movie"
+  );
+  const watchlistShows = watchlist.filter(
+    (item: Content) => item.itemType === "show"
+  );
+
   return (
     <div className="min-h-screen bg-[#00050d] px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto py-8">
@@ -51,7 +62,10 @@ export default function ProfilePage() {
 
         {/* Content Sections */}
         <div className="space-y-8">
-          <WatchlistSection />
+          <WatchlistSection
+            watchlistMovies={watchlistMovies}
+            watchlistShows={watchlistShows}
+          />
         </div>
       </div>
     </div>

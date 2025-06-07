@@ -26,12 +26,12 @@ export default function ShowHero({ show }: ShowHeroProps) {
 
   const handleAddToWatchlist = async () => {
     const content: Content = {
-      id: show.id.toString(),
-      itemType: "tv",
+      id: "sho" + show.id.toString(),
+      itemType: "show",
       title: show.name,
       rating: show.voteAverage,
       posterPath: show.posterPath,
-      overview: show.overview,
+      overview: show.overview.length > 100 ? show.overview.substring(0, 100) + "..." : show.overview,
       createdAt: new Date().toISOString(),
     };
     try {

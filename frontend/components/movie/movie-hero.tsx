@@ -17,12 +17,15 @@ export default function MovieHero({ movie }: MovieHeroProps) {
 
   const handleAddToWatchlist = async () => {
     const content: Content = {
-      id: movie.id.toString(),
+      id: "mov" + movie.id.toString(),
       itemType: "movie",
       title: movie.title,
       rating: movie.voteAverage,
       posterPath: movie.posterPath,
-      overview: movie.overview,
+      overview:
+        movie.overview.length > 100
+          ? movie.overview.substring(0, 100) + "..."
+          : movie.overview,
       createdAt: new Date().toISOString(),
     };
     try {
@@ -40,7 +43,7 @@ export default function MovieHero({ movie }: MovieHeroProps) {
         <div className="relative h-64 w-44 overflow-hidden rounded-md shadow-xl hidden md:block">
           <Image
             src={movie.posterPath}
-            alt={movie.alt}
+            alt={movie.alt || movie.title}
             fill
             className="object-cover"
           />

@@ -20,17 +20,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-@Controller("/api/user")
+@RequestMapping("/api/user")
 @RequiredArgsConstructor
 @RestController
 public class WatchlistController {
-    WatchlistService watchlistService;
-    JwtService jwtService;
+    private final WatchlistService watchlistService;
+    private final JwtService jwtService;
 
     @PostMapping("/add-to-watchlist")
     public void addToWatchlist(@RequestBody AddToWatchlistRequest req,
                                @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader){
-
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Missing Bearer refresh token");
@@ -42,8 +41,6 @@ public class WatchlistController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
                     "Token is expired or invalid");
         }
-
-        System.out.println(req);
 
         watchlistService.addToWatchlist(req.userId(), req.content());
     }
@@ -67,8 +64,9 @@ public class WatchlistController {
         watchlistService.removeFromWatchlist(req.userId(), req.contentId());
     }
 
-    @GetMapping("/get-watchlist")
-    public List<Content> getWatchlist(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader, Map<String, String> req){
+    @PostMapping("/get-watchlist")
+    public List<Content> getWatchlist(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader, @RequestBody Map<String, String> req){
+        System.out.println("Request is: "+req);
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Missing Bearer refresh token");
