@@ -37,9 +37,8 @@ export default async function MoviesPage({ searchParams }: MoviesPageProps) {
         totalItems={TOTAL_ITEMS}
         itemsPerPage={ITEMS_PER_PAGE}
         maxPages={MAX_PAGES}>
-        <EntityGrid
-          items={movies}
-          renderItem={(movie) => (
+        <EntityGrid>
+          {movies.map((movie) => (
             <div key={movie.id} className="relative">
               <MediaCard
                 type="movies"
@@ -51,8 +50,8 @@ export default async function MoviesPage({ searchParams }: MoviesPageProps) {
                 alt={movie.alt || "movie"}
               />
             </div>
-          )}
-        />
+          ))}
+        </EntityGrid>
       </GridPageLayout>
     );
   } catch (error) {

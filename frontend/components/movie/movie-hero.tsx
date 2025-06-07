@@ -1,7 +1,10 @@
+"use client";
 import Image from "next/image";
 import Rating from "@/components/ui/rating";
 import ActionButtons from "@/components/ui/action-buttons";
-import { MovieDetails } from "@/lib/types";
+import { MovieDetails, Content } from "@/lib/types";
+import { addToWatchlist } from "@/lib/actions";
+import { toast } from "sonner";
 
 interface MovieHeroProps {
   movie: MovieDetails;
@@ -11,6 +14,25 @@ export default function MovieHero({ movie }: MovieHeroProps) {
   const releaseYear = new Date(movie.releaseDate).getFullYear();
   const hours = Math.floor(movie.runtime / 60);
   const minutes = movie.runtime % 60;
+
+  const handleAddToWatchlist = async () => {
+    const content: Content = {
+      id: movie.id.toString(),
+      itemType: "movie",
+      title: movie.title,
+      rating: movie.voteAverage,
+      posterPath: movie.posterPath,
+      overview: movie.overview,
+      createdAt: new Date().toISOString(),
+    };
+    try {
+      await addToWatchlist(content);
+      toast.success("Added to watchlist!");
+    } catch (error) {
+      console.error("Failed to add to watchlist", error);
+      toast.error("Failed to add to watchlist");
+    }
+  };
 
   return (
     <div className="absolute bottom-0 left-0 right-0 p-8">
@@ -38,7 +60,7 @@ export default function MovieHero({ movie }: MovieHeroProps) {
             {movie.overview}
           </p>
 
-          <ActionButtons />
+          <ActionButtons onBookmark={handleAddToWatchlist} />
         </div>
       </div>
     </div>

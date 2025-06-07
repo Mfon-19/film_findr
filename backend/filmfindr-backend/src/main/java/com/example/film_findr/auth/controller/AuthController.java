@@ -71,13 +71,6 @@ public class AuthController {
 
         String refreshToken = authHeader.substring("Bearer ".length()).trim();
 
-        try {
-            LoginResponse loginResponse = userService.refresh(refreshToken);
-            return ResponseEntity.ok(loginResponse);
-
-        } catch (Exception e) {
-            throw new ResponseStatusException(
-                    HttpStatus.UNAUTHORIZED, "Token is expired or invalid");
-        }
+        return ResponseEntity.ok(userService.refresh(refreshToken));
     }
 }

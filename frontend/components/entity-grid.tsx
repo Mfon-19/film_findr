@@ -2,18 +2,16 @@
 
 import React from "react";
 
-interface EntityGridProps<T> {
-  items: T[];
-  renderItem: (item: T) => React.ReactNode;
+interface EntityGridProps {
+  children: React.ReactNode;
   className?: string;
 }
 
 const EntityGrid = ({
-  items,
-  renderItem,
+  children,
   className = "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-10 gap-y-8",
-}: EntityGridProps<any>) => {
-  return <div className={className}>{items.map(renderItem)}</div>;
+}: EntityGridProps) => {
+  return <div className={className}>{children}</div>;
 };
 
 export default EntityGrid;

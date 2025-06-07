@@ -2,6 +2,7 @@
 
 import { authOptions } from "@/auth";
 import {
+  Content,
   LoginRequest,
   LoginResponse,
   MovieDetails,
@@ -64,7 +65,7 @@ export async function refreshAccessToken(token: JWT) {
   try {
     const response = await fetch(`${API_URL}/auth/refresh`, {
       headers: {
-        authorization: `Bearer ${token.accessToken}`,
+        authorization: `Bearer ${token.refreshToken}`,
       },
       method: "POST",
     });
@@ -298,14 +299,14 @@ export async function getShows(filters?: {
 }) {
   const session = await getServerSession(authOptions);
   try {
-    console.log("page: ", filters?.page)
+    console.log("page: ", filters?.page);
     const response = await fetch(`${API_URL}/tv/discover`, {
       method: "POST",
       headers: {
         authorization: `Bearer ${session?.accessToken?.toString()}`,
         "content-type": "application/json",
       },
-      body: JSON.stringify({"page": filters?.page || 1}),
+      body: JSON.stringify({ page: filters?.page || 1 }),
       next: { revalidate: 86_400 },
     });
 
@@ -443,6 +444,70 @@ export async function searchShows(query: string) {
 
     const result: Show[] = await response.json();
     return result;
+  } catch (error) {
+    console.error(`Failed to fetch shows: ${error}`);
+  }
+}
+
+export async function getWatchlist() {
+  const session = await getServerSession(authOptions);
+  try {
+    const response = await fetch(`${API_URL}/user/get-watchlist`, {
+      method: "POST",
+      headers: {
+        authorization: `Bearer ${session?.accessToken?.toString()}`,
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ userId: session?.user.id }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Error fetching watchlist");
+    }
+
+    const result: Content[] = await response.json();
+    return result;
+  } catch (error) {
+    console.error(`Failed to fetch watchlist: ${error}`);
+  }
+}
+
+export async function addToWatchlist(content: Content) {
+  const session = await getServerSession(authOptions);
+  console.log(JSON.stringify(content))
+  try {
+    const response = await fetch(`${API_URL}/user/add-to-watchlist`, {
+      method: "POST",
+      headers: {
+        authorization: `Bearer ${session?.accessToken?.toString()}`,
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ userId: session?.user.id, content: content }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Error adding to watchlist");
+    }
+  } catch (error) {
+    console.error(`Failed to add to watchlist: ${error}`);
+  }
+}
+
+export async function removeFromWatchlist(contentId: string) {
+  const session = await getServerSession(authOptions);
+  try {
+    const response = await fetch(`${API_URL}/user/remove-from-watchlist`, {
+      method: "DELETE",
+      headers: {
+        authorization: `Bearer ${session?.accessToken?.toString()}`,
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ userId: session?.user.id, contentId: contentId }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Error deleting from watchlist");
+    }
   } catch (error) {
     console.error(`Failed to fetch shows: ${error}`);
   }

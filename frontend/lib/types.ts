@@ -154,3 +154,23 @@ export interface HoverDetailPanelProps {
   onPlayClick?: (e: React.MouseEvent) => void;
   onAddClick?: (e: React.MouseEvent) => void;
 }
+
+export interface Content {
+  id: string;
+  itemType: string;
+  title: string;
+  rating: number;
+  posterPath: string;
+  overview: string;
+  createdAt: string;
+}
+
+export interface Watchlist {
+  id: WatchlistId;
+  createdAt: string;
+}
+
+export interface WatchlistId {
+  userId: string;
+  contentId: string;
+}

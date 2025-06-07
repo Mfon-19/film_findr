@@ -3,10 +3,12 @@
 import { BasicInfo } from "./basic-info";
 import { PosterImage } from "./poster-image";
 import { HoverDetailPanel } from "./hover-detail-panel";
-import { MediaCardContentProps } from "@/lib/types";
+import { MediaCardContentProps, Content } from "@/lib/types";
+import { addToWatchlist } from "@/lib/actions";
 
 export function MediaCardContent({
   type,
+  id,
   src,
   title,
   rating,
@@ -21,10 +23,28 @@ export function MediaCardContent({
     console.log(`Playing ${type}: ${title}`);
   };
 
-  const handleAddClick = (e: React.MouseEvent) => {
+  const handleAddClick = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log(`Adding ${type} to watchlist: ${title}`);
+    if (!id) {
+      console.error("No ID provided for watchlist item");
+      return;
+    }
+    const content: Content = {
+      id: id.toString(),
+      itemType: type,
+      title,
+      rating,
+      posterPath: src,
+      overview: description,
+      createdAt: new Date().toISOString(),
+    };
+    try {
+      await addToWatchlist(content);
+      console.log(`Adding ${type} to watchlist: ${title}`);
+    } catch (error) {
+      console.error("Failed to add to watchlist", error);
+    }
   };
 
   return (

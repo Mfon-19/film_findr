@@ -1,8 +1,11 @@
+"use client";
 import Image from "next/image";
 import Rating from "@/components/ui/rating";
 import ActionButtons from "@/components/ui/action-buttons";
-import { ShowDetails } from "@/lib/types";
+import { ShowDetails, Content } from "@/lib/types";
 import { MOVIE_POSTER_PLACEHOLDER } from "@/lib/utils";
+import { addToWatchlist } from "@/lib/actions";
+import { toast } from "sonner";
 
 interface ShowHeroProps {
   show: ShowDetails;
@@ -19,6 +22,25 @@ export default function ShowHero({ show }: ShowHeroProps) {
 
   const formatEpisodes = (count: number) => {
     return `${count} episode${count !== 1 ? "s" : ""}`;
+  };
+
+  const handleAddToWatchlist = async () => {
+    const content: Content = {
+      id: show.id.toString(),
+      itemType: "tv",
+      title: show.name,
+      rating: show.voteAverage,
+      posterPath: show.posterPath,
+      overview: show.overview,
+      createdAt: new Date().toISOString(),
+    };
+    try {
+      await addToWatchlist(content);
+      toast.success("Added to watchlist!");
+    } catch (error) {
+      console.error("Failed to add to watchlist", error);
+      toast.error("Failed to add to watchlist");
+    }
   };
 
   return (
@@ -38,7 +60,7 @@ export default function ShowHero({ show }: ShowHeroProps) {
         <p className="mb-6 text-lg text-gray-200">{show.overview}</p>
 
         <div className="mb-8">
-          <ActionButtons />
+          <ActionButtons onBookmark={handleAddToWatchlist} />
         </div>
 
         <div className="flex flex-wrap gap-10 text-sm text-gray-300">

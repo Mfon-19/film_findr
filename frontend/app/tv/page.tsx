@@ -37,9 +37,8 @@ export default async function TVPage({ searchParams }: TVPageProps) {
         totalItems={TOTAL_ITEMS}
         itemsPerPage={ITEMS_PER_PAGE}
         maxPages={MAX_PAGES}>
-        <EntityGrid
-          items={shows}
-          renderItem={(show) => (
+        <EntityGrid>
+          {shows.map((show) => (
             <div key={show.id} className="relative">
               <MediaCard
                 type="tv"
@@ -51,8 +50,8 @@ export default async function TVPage({ searchParams }: TVPageProps) {
                 alt={show.alt || "show"}
               />
             </div>
-          )}
-        />
+          ))}
+        </EntityGrid>
       </GridPageLayout>
     );
   } catch (error) {
