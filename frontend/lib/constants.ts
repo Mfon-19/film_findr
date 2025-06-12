@@ -1,0 +1,1 @@
+export const PSTREAM_URL = "https://iframe.pstream.org/embed/tmdb-movie-";
