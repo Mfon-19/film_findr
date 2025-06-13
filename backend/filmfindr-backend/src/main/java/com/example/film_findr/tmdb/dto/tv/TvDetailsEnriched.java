@@ -19,6 +19,7 @@ public record TvDetailsEnriched(
         String backdropPath,
         List<String> genres,
         float voteAverage,
-        String status
+        String status,
+        List<SeasonDetailsEnriched> seasons
 ) {
 }

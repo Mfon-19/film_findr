@@ -1,6 +1,8 @@
 package com.example.film_findr.tmdb.controller;
 
 import com.example.film_findr.tmdb.AuthenticationHandler;
+import com.example.film_findr.tmdb.dto.SeasonRequest;
+import com.example.film_findr.tmdb.dto.tv.SeasonDetails;
 import com.example.film_findr.tmdb.dto.tv.TvDetailsEnriched;
 import com.example.film_findr.tmdb.dto.tv.TvResultEnriched;
 import com.example.film_findr.tmdb.service.TmdbService;

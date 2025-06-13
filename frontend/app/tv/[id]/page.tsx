@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import DetailPageLayout from "@/components/layouts/detail-page-layout";
 import ShowHero from "@/components/tv/show-hero";
 import ShowDetails from "@/components/tv/show-details";
+import ShowSeasons from "@/components/tv/show-seasons";
 import SimilarMedia from "@/components/similar-media";
 import { getShowById, getSimilarShows } from "@/lib/actions";
 
@@ -13,7 +14,6 @@ async function getShowData(id: string) {
       getShowById(id),
       getSimilarShows(id),
     ]);
-
     return {
       show,
       similarShows: similarShows?.slice(0, SIMILAR_SHOWS_LIMIT),
@@ -37,6 +37,11 @@ export default async function ShowPage({ params }: { params: { id: string } }) {
       title={show.name}
       heroSection={<ShowHero show={show} />}
       detailsSection={<ShowDetails show={show} />}>
+      {/* Seasons & Episodes Section */}
+      <div className="mt-10 border-t border-gray-800 pt-10">
+        <ShowSeasons seasons={show.seasons} />
+      </div>
+
       <div className="mt-10 border-t border-gray-800 pt-10">
         <SimilarMedia title="Similar Shows" items={similarShows} />
       </div>

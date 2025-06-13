@@ -8,7 +8,7 @@ import { MovieDetails, Content } from "@/lib/types";
 import { addToWatchlist } from "@/lib/actions";
 import { toast } from "sonner";
 import { getImageSrc } from "@/lib/utils";
-import { PSTREAM_URL } from "@/lib/constants";
+import { PSTREAM_MOVIE_URL } from "@/lib/constants";
 
 interface MovieHeroProps {
   movie: MovieDetails;
@@ -90,7 +90,7 @@ export default function MovieHero({ movie }: MovieHeroProps) {
       <VideoPopup
         isOpen={isVideoPopupOpen}
         onClose={handleCloseVideoPopup}
-        videoUrl={PSTREAM_URL+movie.id.toString()}
+        videoUrl={PSTREAM_MOVIE_URL+movie.id.toString()}
       />
     </>
   );

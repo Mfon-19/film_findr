@@ -11,10 +11,13 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -200,21 +203,72 @@ public class TmdbService {
 
     public Mono<TvDetailsEnriched> getShowByIdEnriched(String showId) {
         return Mono.zip(getShowById(showId), fetchImageConfig())
-                .map(tuple -> {
-                    TvDetails show = tuple.getT1();
-                    ImagesCfg imgCfg = tuple.getT2();
+                .flatMap(tuple -> {
+                    TvDetails show  = tuple.getT1();
+                    ImagesCfg cfg   = tuple.getT2();
+                    
+                    log.info("Fetching {} seasons for show {} ({})", show.numberOfSeasons(), show.name(), showId);
 
-                    return new TvDetailsEnriched(
-                            show.id(), show.name(), show.adult(), show.overview(), show.createdBy(),
-                            show.firstAirDate(), show.lastAirDate(), show.numberOfEpisodes(),
-                            show.numberOfSeasons(), show.originalLanguage(),
-                            imageUrlBuilder.buildPosterUrl(show.posterPath(), imgCfg, "w500"),
-                            imageUrlBuilder.buildBackdropUrl(show.backdropPath(), imgCfg, "w1280"),
-                            show.genres().stream().map(GenreDTO::name).toList(),
-                            show.voteAverage(), show.status()
-                    );
+                    return getSeasons(showId, show.numberOfSeasons(), cfg)
+                            .map(seasons -> {
+                                log.info("Creating TvDetailsEnriched for show {} with {} seasons", show.name(), seasons.size());
+                                return new TvDetailsEnriched(
+                                        show.id(),
+                                        show.name(),
+                                        show.adult(),
+                                        show.overview(),
+                                        show.createdBy(),
+                                        show.firstAirDate(),
+                                        show.lastAirDate(),
+                                        show.numberOfEpisodes(),
+                                        show.numberOfSeasons(),
+                                        show.originalLanguage(),
+                                        imageUrlBuilder.buildPosterUrl(show.posterPath(), cfg, "w500"),
+                                        imageUrlBuilder.buildBackdropUrl(show.backdropPath(), cfg, "w1280"),
+                                        show.genres().stream().map(GenreDTO::name).toList(),
+                                        show.voteAverage(),
+                                        show.status(),
+                                        seasons
+                                );
+                            });
                 });
     }
+
+
+    public Mono<SeasonDetails> getSeasonDetails(String seriesId, int seasonNumber) {
+        return webClient.get()
+                .uri("/tv/{seriesId}/season/{seasonNumber}?api_key={apiKey}", seriesId, seasonNumber, apiKey)
+                .retrieve()
+                .bodyToMono(SeasonDetails.class)
+                .onErrorMap(this::handleWebClientError);
+    }
+
+    public Mono<List<SeasonDetailsEnriched>> getSeasons(String seriesId, int seasons, ImagesCfg cfg) {
+        return Flux.range(1, seasons)
+                .flatMap(n -> getSeasonDetails(seriesId, n)
+                        .map(season -> new SeasonDetailsEnriched(
+                                season.id(),
+                                season.episodes().stream()
+                                        .map(ep -> new EpisodeDetailsEnriched(
+                                                ep.id(),
+                                                ep.name(),
+                                                ep.overview(),
+                                                ep.runtime(),
+                                                ep.episodeNumber(),
+                                                ep.seasonNumber(),
+                                                imageUrlBuilder.buildPosterUrl(ep.stillPath(), cfg, "w500")
+                                        ))
+                                        .toList(),
+                                imageUrlBuilder.buildPosterUrl(season.posterPath(), cfg, "w500"),
+                                season.seasonNumber(),
+                                season.voteAverage(),
+                                season.airDate()
+                        ))
+                        .onErrorResume(e -> Mono.empty())
+                )
+                .collectList();
+    }
+
 
     //@Cacheable("movieGenres")
     public Mono<Map<Integer, String>> genreMap() {

@@ -97,6 +97,25 @@ export interface ShowDetails extends Show {
   numberOfEpisodes: number;
   numberOfSeasons: number;
   status: string;
+  seasons: SeasonDetails[];
+}
+export interface SeasonDetails {
+  id: number;
+  episodes: EpisodeDetails[];
+  posterPath: string;
+  seasonNumber: number;
+  voteAverage: number;
+  airDate: string;
+}
+
+export interface EpisodeDetails {
+  id: number;
+  name: string;
+  overview: string;
+  runtime: number;
+  episodeNumber: number;
+  seasonNumber: number;
+  stillPath: string;
 }
 
 interface CreatedBy {
@@ -114,9 +133,7 @@ export interface MediaCardProps {
   description?: string;
   year?: number;
   alt?: string;
-  // TV-specific props
   firstAirDate?: string;
-  // Movie-specific props
   releaseDate?: string;
 }
 
