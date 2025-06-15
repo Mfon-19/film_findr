@@ -6,6 +6,9 @@ import com.example.film_findr.auth.dto.RegisterRequest;
 import com.example.film_findr.auth.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +26,7 @@ import org.springframework.web.server.ResponseStatusException;
 @RequiredArgsConstructor
 public class AuthController {
     private final UserService userService;
+    private final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     /**
      * Handles user registration requests.
@@ -63,12 +67,12 @@ public class AuthController {
     @PostMapping("/refresh")
     public ResponseEntity<LoginResponse> refresh(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
-
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            logger.warn("No Bearer token provided");
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Missing Bearer refresh token");
         }
-
+        logger.info("Refresh request received {}", authHeader);
         String refreshToken = authHeader.substring("Bearer ".length()).trim();
 
         return ResponseEntity.ok(userService.refresh(refreshToken));

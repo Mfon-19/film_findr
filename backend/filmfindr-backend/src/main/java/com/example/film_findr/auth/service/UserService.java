@@ -5,6 +5,8 @@ import com.example.film_findr.auth.dto.LoginResponse;
 import com.example.film_findr.auth.dto.RegisterRequest;
 import com.example.film_findr.auth.model.User;
 import com.example.film_findr.auth.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,6 +20,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
      * Registers a new user and immediately returns JWT + refresh-token.
@@ -61,7 +64,9 @@ public class UserService {
      * Exchanges a valid refresh token for a new access token.
      */
     public LoginResponse refresh(String refreshToken) {
+        logger.info("Trying to refresh token {}", refreshToken);
         String email = jwtService.parseRefreshToken(refreshToken);
+        logger.info("Email from jwt {}", email);
         User user = userRepository.findByEmailIgnoreCase(email)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 

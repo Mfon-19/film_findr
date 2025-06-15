@@ -63,15 +63,18 @@ export async function register({ email, password, username }: RegisterRequest) {
 }
 
 export async function refreshAccessToken(token: JWT) {
+  console.log("Calling refresh...")
   try {
     const response = await fetch(`${API_URL}/auth/refresh`, {
       headers: {
-        authorization: `Bearer ${token.refreshToken}`,
+        authorization: `Bearer ${token.refreshToken.toString()}`,
       },
       method: "POST",
     });
 
-    if (!response.ok) throw new Error("Refresh error");
+    if (!response.ok) {
+      throw new Error("Refresh error");
+    }
 
     const data: LoginResponse = await response.json();
 
@@ -459,7 +462,7 @@ export async function getWatchlist() {
         authorization: `Bearer ${session?.accessToken?.toString()}`,
         "content-type": "application/json",
       },
-      body: JSON.stringify({ userId: session?.user.id as UUID}),
+      body: JSON.stringify({ userId: session?.user.id as UUID }),
     });
 
     if (!response.ok) {
@@ -482,11 +485,14 @@ export async function addToWatchlist(content: Content) {
         authorization: `Bearer ${session?.accessToken?.toString()}`,
         "content-type": "application/json",
       },
-      body: JSON.stringify({ userId: session?.user.id as UUID, content: content }),
+      body: JSON.stringify({
+        userId: session?.user.id as UUID,
+        content: content,
+      }),
     });
 
     if (!response.ok) {
-      console.log("The response is: ", response)
+      console.log("The response is: ", response);
       throw new Error("Error adding to watchlist");
     }
   } catch (error) {
