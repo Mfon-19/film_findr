@@ -92,11 +92,6 @@ export default function SearchPageComponent({
     return new Date(releaseDate).getFullYear();
   };
 
-  const getShowYear = (firstAirDate: string): number | undefined => {
-    if (!firstAirDate) return undefined;
-    return new Date(firstAirDate).getFullYear();
-  };
-
   return (
     <div className="min-h-screen bg-[#00050d] pt-24 pb-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

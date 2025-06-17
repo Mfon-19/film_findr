@@ -1,12 +1,10 @@
 import { MagnifyingGlassIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { UseSearchReturn } from "./use-search";
+import { UseSearchReturn as SearchComponentProps } from "./use-search";
 
 const styles = {
   pill: "rounded-full backdrop-blur-md ring-1 ring-white/10",
   iconSize: "h-6 w-6",
 } as const;
-
-export interface SearchComponentProps extends UseSearchReturn {}
 
 export function SearchComponent({
   isExpanded,

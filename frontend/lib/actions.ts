@@ -13,8 +13,6 @@ import {
 } from "./types";
 import { getServerSession } from "next-auth";
 import { JWT } from "next-auth/jwt";
-import { number } from "zod";
-import { pages } from "next/dist/build/templates/app-page";
 import { UUID } from "crypto";
 
 const API_URL = "http://localhost:8080/api";

@@ -4,16 +4,14 @@ import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import { FaPlay } from "react-icons/fa";
 import { HiOutlineInformationCircle } from "react-icons/hi";
-import { MovieDetails, MovieResult } from "@/lib/types";
+import { MovieDetails } from "@/lib/types";
 import { getImageSrc } from "@/lib/utils";
 
 export interface HeroSectionProps {
-  movieData: MovieResult[];
   heroData: MovieDetails[];
 }
 
 const HeroSection = (props: HeroSectionProps) => {
-  const movieData = props.movieData;
   const heroData = props.heroData;
 
   const [currentIndex, setCurrentIndex] = useState(0);

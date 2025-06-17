@@ -38,7 +38,7 @@ const Page = async () => {
 
   return (
     <div className="flex flex-col">
-      <HeroSection movieData={topRatedMovies} heroData={heroSectionMovies} />
+      <HeroSection heroData={heroSectionMovies} />
       <div className="bg-[#00050d]">
         <MediaCarousel title="Trending Movies" items={trendingMovies} />
         <MediaCarousel title="Top Rated Movies" items={topRatedMovies} />
