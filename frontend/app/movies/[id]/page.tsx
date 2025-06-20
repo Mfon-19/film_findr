@@ -27,7 +27,7 @@ async function getMovieData(id: string) {
 export default async function MoviePage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
   const { movie, similarMovies } = await getMovieData(id);
@@ -48,7 +48,11 @@ export default async function MoviePage({
   );
 }
 
-export async function generateMetadata({ params }: { params: { id: string } }) {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const { id } = await params;
   const movie = await getMovieById(id);
 

@@ -36,7 +36,7 @@ const HeroSection = (props: HeroSectionProps) => {
     }, 6000);
 
     return () => clearInterval(interval);
-  }, []);
+  });
 
   return (
     <main className="flex flex-col bg-[#00050d] pt-20 md:pt-0">

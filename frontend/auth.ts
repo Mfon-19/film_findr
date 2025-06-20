@@ -12,7 +12,7 @@ export const authOptions = {
         email: {},
         password: {},
       },
-      authorize: async (credentials) => {
+      authorize: async (credentials, _req) => {
         try {
           const { email, password } = await authSchema
             .omit({ username: true })
@@ -30,7 +30,10 @@ export const authOptions = {
             username: response.user.username,
             accessToken: response.accessToken,
             refreshToken: response.refreshToken,
-            accessTokenExpires: Date.now() + response.accessExpiresIn * 1000,
+            accessTokenExpires: (
+              Date.now() +
+              response.accessExpiresIn * 1000
+            ).toString(),
           };
         } catch (error) {
           console.error("Authentication error: ", error);
@@ -57,7 +60,7 @@ export const authOptions = {
         token.accessTokenExpires = user.accessTokenExpires;
         return token;
       }
-      
+
       if (Date.now() < (token.accessTokenExpires as number) - 60_000) {
         return token;
       }

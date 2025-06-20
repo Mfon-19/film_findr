@@ -5,22 +5,26 @@ import { getMovies } from "@/lib/actions";
 import { parseSearchParams } from "@/lib/utils/searchParams";
 
 interface MoviesPageProps {
-  searchParams: {
-    sortBy?: string;
-    genres?: string;
-    rating?: string;
-    year?: string;
-    language?: string;
-    page?: string;
-  };
+  sortBy?: string;
+  genres?: string;
+  rating?: string;
+  year?: string;
+  language?: string;
+  page?: string;
 }
 
 const ITEMS_PER_PAGE = 20;
 const MAX_PAGES = 5;
 const TOTAL_ITEMS = 100;
 
-export default async function MoviesPage({ searchParams }: MoviesPageProps) {
-  const filters = parseSearchParams(searchParams);
+export default async function MoviesPage({
+  searchParams,
+}: {
+  searchParams: Promise<MoviesPageProps>;
+}) {
+  const filters = parseSearchParams(
+    (await searchParams) as Record<string, string | undefined>
+  );
 
   try {
     const movies = await getMovies(filters);

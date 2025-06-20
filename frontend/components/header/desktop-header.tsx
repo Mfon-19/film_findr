@@ -2,15 +2,16 @@ import Link from "next/link";
 import Logo from "../logo";
 import { UserCircleIcon } from "@heroicons/react/24/outline";
 import { NavLink } from "./nav-link";
-import { SearchComponent, SearchComponentProps } from "./search-component";
+import { SearchComponent } from "./search-component";
 import { NAVIGATION_ITEMS } from "./constants";
+import { UseSearchReturn } from "./use-search";
 
 const styles = {
   pill: "rounded-full backdrop-blur-md ring-1 ring-white/10",
 } as const;
 
 export interface DesktopHeaderProps {
-  searchProps: SearchComponentProps;
+  searchProps: UseSearchReturn;
 }
 
 export function DesktopHeader({ searchProps }: DesktopHeaderProps) {

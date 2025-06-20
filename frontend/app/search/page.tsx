@@ -1,11 +1,20 @@
-'use client';
+"use client";
 
-import { useSearchParams } from 'next/navigation';
-import SearchPageComponent from '@/components/search-page-component';
+import { Suspense } from "react";
+import { useSearchParams } from "next/navigation";
+import SearchPageComponent from "@/components/search-page-component";
 
-export default function SearchPage() {
+function SearchPageContent() {
   const searchParams = useSearchParams();
-  const query = searchParams.get('q') || '';
+  const query = searchParams.get("q") || "";
 
   return <SearchPageComponent initialQuery={query} />;
+}
+
+export default function SearchPage() {
+  return (
+    <Suspense>
+      <SearchPageContent />
+    </Suspense>
+  );
 }
