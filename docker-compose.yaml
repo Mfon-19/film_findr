@@ -1,0 +1,44 @@
+services:
+  web:
+    build: 
+      context: ./frontend
+    restart: unless-stopped
+    depends_on: [api]
+    environment:
+      - NEXT_PUBLIC_API_URL=http://api:8080/api
+    ports:
+      - "3000:3000"
+  
+  api:
+    build: 
+      context: ./backend/filmfindr-backend
+    restart: unless-stopped
+    environment:
+      - SPRING_APPLICATION_NAME=Film-Findr
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/filmfindr
+      - SPRING_DATASOURCE_USERNAME=filmfindr_user
+      - SPRING_DATASOURCE_PASSWORD=Ournameiswhaa*01
+      - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.PostgreSQLDialect
+      - SECURITY_JWT_SECRET=trzZE5GtxMNC96nXRFJIBKdSdqiA4mgWwKPkVUA3Cjw=
+      - SPRING_MAIN_WEB_APPLICATION_TYPE=servlet
+      - TMDB_API_KEY=0a17f26d4cc0f17e25737e5f64849f44
+      - TMDB_API_READ_ACCESS_TOKEN=eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwYTE3ZjI2ZDRjYzBmMTdlMjU3MzdlNWY2NDg0OWY0NCIsIm5iZiI6MTc0NTI3NTQ0NC44NDgsInN1YiI6IjY4MDZjYTM0YzNlOGU3NGI2ZGVlNzFkMiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.ruNqsETJOo7g54LckncP6JB2jBEZk0CRCZ9UaVAkBIg
+    depends_on: [db]
+    ports:
+      - "8080:8080"
+
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=filmfindr
+      - POSTGRES_USER=filmfindr_user
+      - POSTGRES_PASSWORD=Ournameiswhaa*01
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+
+volumes:
+  db-data:

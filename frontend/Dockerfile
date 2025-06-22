@@ -3,10 +3,13 @@
 FROM node:22
 WORKDIR /app
 COPY . .
+ARG NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+ENV AUTH_SECRET=JfLexDAc+3QAbUDbge10bJ/2uOUvZINS/sj1squ7vDg=
 RUN npm install
 RUN npm run build
 CMD ["npm", "run", "start"]
-EXPOSE 3005
+EXPOSE 3000
 
 
 # template from next.js docs
